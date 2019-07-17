@@ -1,0 +1,26 @@
+# dependencies
+/node_modules
+package-lock.json
+
+# IDE
+/.idea
+/.awcache
+/.vscode
+
+# misc
+npm-debug.log
+.DS_Store
+
+# tests
+/test
+/coverage
+/.nyc_output
+
+# source
+dist
+
+# schematics
+schematics/install/*.js
+schematics/install/*.d.ts
+schematics/install/express-engine/*.js
+schematics/install/express-engine/*.d.ts

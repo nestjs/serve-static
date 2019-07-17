@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "SchematicsNestEngineInstall",
+  "title": "Nest Engine Install Options Schema",
+  "type": "object",
+  "properties": {
+    "clientProject": {
+      "type": "string",
+      "description": "Name of related client app.",
+      "x-prompt": "What is the name of your application?"
+    },
+    "appId": {
+      "type": "string",
+      "format": "html-selector",
+      "description": "The appId to use withServerTransition.",
+      "default": "serverApp"
+    },
+    "main": {
+      "type": "string",
+      "format": "path",
+      "description": "The name of the main entry-point file.",
+      "default": "main.server.ts"
+    },
+    "serverPort": {
+      "type": "number",
+      "default": 4000,
+      "description": "The port for the Nest server."
+    },
+    "appDir": {
+      "type": "string",
+      "format": "path",
+      "description": "The name of the application directory.",
+      "default": "app"
+    },
+    "rootModuleFileName": {
+      "type": "string",
+      "format": "path",
+      "description": "The name of the root module file",
+      "default": "app.server.module.ts"
+    },
+    "rootModuleClassName": {
+      "type": "string",
+      "description": "The name of the root module class.",
+      "default": "AppServerModule"
+    },
+    "skipInstall": {
+      "description": "Skip installing dependency packages.",
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": ["clientProject"]
+}
