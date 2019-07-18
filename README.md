@@ -42,12 +42,12 @@ See full example [here](https://github.com/TrilonIO/serve-static-demo).
 
 ## Usage
 
-Simply import `ServeStaticModuleModule` in your Nest application.
+Simply import `ServeStaticModule` in your Nest application.
 
 ```typescript
 import { Module } from '@nestjs/common';
 import { join } from 'path';
-import { ServeStaticModuleModule } from '@nestjs/serve-static';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
