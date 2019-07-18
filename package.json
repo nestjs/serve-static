@@ -5,7 +5,7 @@
   "author": "Kamil Mysliwiec",
   "license": "MIT",
   "scripts": {
-    "build": "npm run build:libx",
+    "build": "npm run build:lib",
     "build:lib": "tsc -p tsconfig.json",
     "precommit": "lint-staged",
     "prepublish:npm": "npm run build",
