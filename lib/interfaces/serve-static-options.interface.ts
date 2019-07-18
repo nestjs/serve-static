@@ -1,12 +1,10 @@
-export interface AngularModuleOptions {
+export interface ServeStaticModuleOptions {
   /**
-   * Static files root directory.
-   * Default: "client/dist"
+   * Static files root directory. Default: "client/dist"
    */
   rootPath?: string;
   /**
-   * Path to render Angular app.
-   * Default: * (wildcard - all paths)
+   * Path to render static app. Default: * (wildcard - all paths)
    */
   renderPath?: string;
   /**

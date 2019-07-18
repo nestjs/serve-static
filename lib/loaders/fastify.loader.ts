@@ -2,18 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { AbstractHttpAdapter } from '@nestjs/core';
 import * as fs from 'fs';
 import { loadPackage } from '../utils/service-static.utils';
-import { AngularModuleOptions } from '../interfaces/angular-options.interface';
+import { ServeStaticModuleOptions } from '../interfaces/serve-static-options.interface';
 import { AbstractLoader } from './abstract.loader';
 
 @Injectable()
 export class FastifyLoader extends AbstractLoader {
   public register(
     httpAdapter: AbstractHttpAdapter,
-    options: AngularModuleOptions,
+    options: ServeStaticModuleOptions
   ) {
     const app = httpAdapter.getInstance();
-    const fastifyStatic = loadPackage('fastify-static', 'AngularModule', () =>
-      require('fastify-static'),
+    const fastifyStatic = loadPackage(
+      'fastify-static',
+      'ServeStaticModule',
+      () => require('fastify-static')
     );
     const { setHeaders, redirect, ...send } =
       options.serveStaticOptions || ({} as any);
@@ -24,7 +26,7 @@ export class FastifyLoader extends AbstractLoader {
       root: clientPath,
       setHeaders,
       redirect,
-      send,
+      send
     });
     app.get(options.renderPath, (req: any, res: any) => {
       const stream = fs.createReadStream(indexFilePath);

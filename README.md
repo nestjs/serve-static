@@ -26,15 +26,9 @@
 
 ## Description
 
-Angular [Universal](https://github.com/angular/universal) module for [Nest](https://github.com/nestjs/nest).
+Serve Static module for [Nest](https://github.com/nestjs/nest).
 
 ## Installation
-
-Using the Angular CLI:
-
-```bash
-$ ng add @nestjs/serve-static
-```
 
 Or manually:
 
@@ -44,7 +38,7 @@ $ npm i --save @nestjs/serve-static
 
 ## Example
 
-See full example [here](https://github.com/kamilmysliwiec/universal-nest).
+See full example [here](https://github.com/TrilonIO/serve-static-demo).
 
 ## Usage
 
@@ -57,9 +51,8 @@ import { ServeStaticModuleModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
-    ServeStaticModuleModule.forRoot({
-      viewsPath: join(process.cwd(), 'dist/browser'),
-      bundle: require('./../dist/server/main.js'),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'client'),
     }),
   ],
 })
@@ -72,45 +65,9 @@ The `forRoot()` method takes an options object with a few useful properties.
 
 | Property        | Type           | Description  |
 | ------------- | ------------- | ----- |
-| `viewsPath`      | string | The directory where the module should look for client bundle (Angular app) |
-| `bundle`      | Object      |   Bundle file (webpack output with `AppServerModuleNgFactory`) |
-| `templatePath` | string?      | Path to index file (default: `{viewsPaths}/index.html`) |
-| `rootStaticPath` | string?    | Static files root directory (default: `*.*`) |
-| `renderPath` | string?    | Path to render Angular app (default: `*`) |
-| `extraProviders` | StaticProvider[]?    | The platform level providers for the current render request |
-
-## Request and Response Providers
-
-This tool uses `@nguniversal/express-engine` and will properly provide access to the Express Request and Response objects in you Angular components.
-
-This is useful for things like setting the response code to 404 when your Angular router can't find a page (i.e. `path: '**'` in routing):
-
-```ts
-import { Response } from 'express';
-import { Component, Inject, Optional, PLATFORM_ID } from '@angular/core';
-import { isPlatformServer } from '@angular/common';
-import { RESPONSE } from '@nguniversal/express-engine/tokens';
-
-@Component({
-  selector: 'my-not-found',
-  templateUrl: './not-found.component.html',
-  styleUrls: ['./not-found.component.scss'],
-})
-export class NotFoundComponent {
-  constructor(
-    @Inject(PLATFORM_ID)
-    private readonly platformId: any,
-    @Optional()
-    @Inject(RESPONSE)
-    res: Response,
-  ) {
-    // `res` is the express response, only available on the server
-    if (isPlatformServer(this.platformId)) {
-      res.status(404);
-    }
-  }
-}
-```
+| `rootPath`      | string | Static files root directory. Default: "client/dist"|
+| `renderPath`      | string |   Path to render static app. Default: * (wildcard - all paths)|
+| `serveStaticOptions` | Object | Serve static options (static files) |
 
 ## Support
 

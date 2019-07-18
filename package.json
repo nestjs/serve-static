@@ -15,24 +15,15 @@
     "publish:next": "npm publish --access public --tag next"
   },
   "peerDependencies": {
-    "@angular/platform-server": "^7.2.9 || ^8.0.0",
     "@nestjs/common": "^6.0.0",
     "@nestjs/core": "^6.0.0",
-    "@nguniversal/common": "^7.1.1 || ^8.0.0",
-    "@nguniversal/express-engine": "^7.1.1 || ^8.0.0",
-    "@nguniversal/module-map-ngfactory-loader": "^7.1.1 || ^8.0.0",
     "express": "^4.16.4",
     "zone.js": "^0.8.29 || ^0.9.0"
   },
   "devDependencies": {
-    "@angular/platform-server": "8.1.1",
     "@nestjs/common": "6.5.2",
     "@nestjs/core": "6.5.2",
-    "@nguniversal/common": "8.1.1",
-    "@nguniversal/express-engine": "8.1.1",
-    "@nguniversal/module-map-ngfactory-loader": "8.1.1",
-    "@types/memory-cache": "0.2.0",
-    "@types/node": "^11.13.10",
+    "@types/node": "^12.6.8",
     "express": "4.17.1",
     "husky": "3.0.0",
     "lint-staged": "9.2.0",
@@ -47,9 +38,8 @@
     "concurrently": "4.1.1",
     "cross-spawn": "6.0.5",
     "livereload": "0.8.0",
-    "memory-cache": "0.2.0",
-    "string-replace-loader": "^2.1.1",
-    "webpack-node-externals": "1.7.2"
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.5.2"
   },
   "schematics": "./schematics/collection.json",
   "lint-staged": {
