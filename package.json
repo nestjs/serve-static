@@ -5,9 +5,8 @@
   "author": "Kamil Mysliwiec",
   "license": "MIT",
   "scripts": {
-    "build": "npm run build:lib && npm run build:schematics",
+    "build": "npm run build:libx",
     "build:lib": "tsc -p tsconfig.json",
-    "build:schematics": "tsc -p tsconfig.schematics.json",
     "precommit": "lint-staged",
     "prepublish:npm": "npm run build",
     "publish:npm": "npm publish --access public",
@@ -33,15 +32,12 @@
     "zone.js": "0.9.1"
   },
   "dependencies": {
-    "@angular-devkit/schematics": "8.1.1",
-    "@schematics/angular": "8.1.1",
     "concurrently": "4.1.1",
     "cross-spawn": "6.0.5",
     "livereload": "0.8.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.2"
   },
-  "schematics": "./schematics/collection.json",
   "lint-staged": {
     "*.ts": [
       "prettier --write",

@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "rootDir": "schematics",
-    "outDir": "./schematics"
-  },
-  "extends": "./tsconfig.json",
-  "include": ["schematics/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts", "./schematics/install/files/**"]
-}

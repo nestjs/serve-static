@@ -18,9 +18,3 @@ npm-debug.log
 
 # source
 dist
-
-# schematics
-schematics/install/*.js
-schematics/install/*.d.ts
-schematics/install/express-engine/*.js
-schematics/install/express-engine/*.d.ts
