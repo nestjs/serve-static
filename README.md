@@ -38,7 +38,7 @@ $ npm i --save @nestjs/serve-static
 
 ## Example
 
-See full example [here](https://github.com/TrilonIO/serve-static-demo).
+See full example [here](https://github.com/nestjs/nest/tree/master/sample/24-serve-static).
 
 ## Usage
 
