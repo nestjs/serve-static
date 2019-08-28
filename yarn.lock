@@ -18,19 +18,19 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@nestjs/common@6.6.0":
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-6.6.0.tgz#e266b0369398716a6afb479c82daed106c570231"
-  integrity sha512-QkhvoZr8Qr+NBuOF/N5LRmyOL/PG9uV5NcQJRKKWA218W0c1x0/B66LqY4W128YYG963JWpojewowoWYHo4mCw==
+"@nestjs/common@6.6.2":
+  version "6.6.2"
+  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-6.6.2.tgz#5a1aacd3eb1e2b8e38740f3c9a2233fc19557893"
+  integrity sha512-d7/OLI/f04LX0wgFPGuEO2ApNr4Nosn7r7JFaKQFAH1X1j0xOdXwnknUmA9AP06Nta72EAAWWI2a+hOIQBp+NQ==
   dependencies:
     axios "0.19.0"
     cli-color "1.4.0"
     uuid "3.3.3"
 
-"@nestjs/core@6.6.0":
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-6.6.0.tgz#ab56bbcacedb80b9d6bafe216bf3388df1f75d02"
-  integrity sha512-LSTrXjM6pV8OX0GXGhKdE9rR3GhAwjEskaaQwoR24ica80sAdKZ81IV5nAU70lxBWYQwL5OkjdbxXtujRmTM6g==
+"@nestjs/core@6.6.2":
+  version "6.6.2"
+  resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-6.6.2.tgz#0b11f834360462faead04c23d0e268edf57955da"
+  integrity sha512-TKA7t/OHQeCf80TQsARH7Gmk7olnFMI3XJPaIDraUbBa/AmuGb4peSiMLn1I+ZYcg6wTgPaGNEiLuDWcRB13hQ==
   dependencies:
     "@nuxtjs/opencollective" "0.2.2"
     fast-safe-stringify "2.0.6"
