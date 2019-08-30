@@ -20,7 +20,7 @@
   "devDependencies": {
     "@nestjs/common": "6.6.2",
     "@nestjs/core": "6.6.2",
-    "@types/node": "12.7.2",
+    "@types/node": "12.7.3",
     "reflect-metadata": "0.1.13",
     "rxjs": "6.5.2",
     "express": "4.17.1",
