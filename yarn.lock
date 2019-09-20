@@ -18,22 +18,22 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@nestjs/common@6.6.7":
-  version "6.6.7"
-  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-6.6.7.tgz#71bb2ddf4ab891a389c8e5b70d8dedef4a9b1e83"
-  integrity sha512-F/jZ8YKJXqZj5qaDSmIauSBv/zybX85reAjuJMgBGj+gv/8FlQGvsvA0/8HPdjqDAQ2xIi4hRfe+CjZyDnxzvQ==
+"@nestjs/common@6.7.1":
+  version "6.7.1"
+  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-6.7.1.tgz#a3ec48d0f82556f5779dac1c278633c206ee97a6"
+  integrity sha512-3g4XqXmQxi+jjdi1ieoErwNjj1MbjxUumXug2xbF0Qkc1P+IkBNNktaBFTNRPHx6Se4qIcxj7p1vv6mAX6jAYQ==
   dependencies:
     axios "0.19.0"
     cli-color "1.4.0"
     uuid "3.3.3"
 
-"@nestjs/core@6.6.7":
-  version "6.6.7"
-  resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-6.6.7.tgz#a0cb16157e0c670f714d460ba4a1dde8f4162b1c"
-  integrity sha512-SH3ZiG8+LruM3N1Csp87HocBmfn/BASwHAUkQdQxsNIBJanbOEjIc1HiPxXv0RXZMrXDM2Wt483VxZUtLsetLQ==
+"@nestjs/core@6.7.1":
+  version "6.7.1"
+  resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-6.7.1.tgz#c786db762157dce7e4f72df9c2ef71693ea7361d"
+  integrity sha512-qk1LBF37VQhiFw0FGY8e3Q90lJ1i7+vjlVOBpCQVL1qCWB2AZldiB9uscoDYkn1Ugf310LOylnlV+ghtwrfeng==
   dependencies:
     "@nuxtjs/opencollective" "0.2.2"
-    fast-safe-stringify "2.0.6"
+    fast-safe-stringify "2.0.7"
     iterare "1.2.0"
     object-hash "1.3.1"
     optional "0.1.4"
@@ -603,10 +603,10 @@ fast-glob@^3.0.3:
     merge2 "^1.2.3"
     micromatch "^4.0.2"
 
-fast-safe-stringify@2.0.6:
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/fast-safe-stringify/-/fast-safe-stringify-2.0.6.tgz#04b26106cc56681f51a044cfc0d76cf0008ac2c2"
-  integrity sha512-q8BZ89jjc+mz08rSxROs8VsrBBcn1SIw1kq9NjolL509tkABRk9io01RAjSaEv1Xb2uFLt8VtRiZbGp5H8iDtg==
+fast-safe-stringify@2.0.7:
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/fast-safe-stringify/-/fast-safe-stringify-2.0.7.tgz#124aa885899261f68aedb42a7c080de9da608743"
+  integrity sha512-Utm6CdzT+6xsDk2m8S6uL8VHxNwI6Jub+e9NYTcAms28T84pTa25GJQV9j0CY0N1rM8hK4x6grpF2BQf+2qwVA==
 
 fastq@^1.6.0:
   version "1.6.0"
