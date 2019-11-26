@@ -30,8 +30,6 @@ Serve Static module for [Nest](https://github.com/nestjs/nest).
 
 ## Installation
 
-Or manually:
-
 ```bash
 $ npm i --save @nestjs/serve-static
 ```
