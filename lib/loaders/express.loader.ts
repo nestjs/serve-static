@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AbstractHttpAdapter } from '@nestjs/core';
-import { loadPackage } from '../utils/service-static.utils';
+import { loadPackage } from '@nestjs/common/utils/load-package.util';
 import { ServeStaticModuleOptions } from '../interfaces/serve-static-options.interface';
 import { AbstractLoader } from './abstract.loader';
 
