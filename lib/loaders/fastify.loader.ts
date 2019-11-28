@@ -26,7 +26,8 @@ export class FastifyLoader extends AbstractLoader {
       root: clientPath,
       setHeaders,
       redirect,
-      send
+      send,
+      wildcard: false
     });
     app.get(options.renderPath, (req: any, res: any) => {
       const stream = fs.createReadStream(indexFilePath);
