@@ -9,7 +9,7 @@ import { AbstractLoader } from './abstract.loader';
 export class FastifyLoader extends AbstractLoader {
   public register(
     httpAdapter: AbstractHttpAdapter,
-    options: ServeStaticModuleOptions
+    options: ServeStaticModuleOptions[]
   ) {
     const app = httpAdapter.getInstance();
     const fastifyStatic = loadPackage(
@@ -17,21 +17,26 @@ export class FastifyLoader extends AbstractLoader {
       'ServeStaticModule',
       () => require('fastify-static')
     );
-    const { setHeaders, redirect, ...send } =
-      options.serveStaticOptions || ({} as any);
-    const clientPath = options.rootPath;
-    const indexFilePath = this.getIndexFilePath(clientPath);
 
-    app.register(fastifyStatic, {
-      root: clientPath,
-      setHeaders,
-      redirect,
-      send,
-      wildcard: false
-    });
-    app.get(options.renderPath, (req: any, res: any) => {
-      const stream = fs.createReadStream(indexFilePath);
-      res.type('text/html').send(stream);
+    options.forEach(option => {
+      const { setHeaders, redirect, ...send } =
+        option.serveStaticOptions || ({} as any);
+      const clientPath = option.rootPath;
+      const indexFilePath = this.getIndexFilePath(clientPath);
+
+      app.register(fastifyStatic, {
+        root: clientPath,
+        prefix: option.renderPath,
+        setHeaders,
+        redirect,
+        send,
+        decorateReply: options.length === 1
+      });
+
+      app.get(option.renderPath, (req: any, res: any) => {
+        const stream = fs.createReadStream(indexFilePath);
+        res.type('text/html').send(stream);
+      });
     });
   }
 }

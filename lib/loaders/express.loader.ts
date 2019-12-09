@@ -8,18 +8,22 @@ import { AbstractLoader } from './abstract.loader';
 export class ExpressLoader extends AbstractLoader {
   public register(
     httpAdapter: AbstractHttpAdapter,
-    options: ServeStaticModuleOptions
+    options: ServeStaticModuleOptions[]
   ) {
     const app = httpAdapter.getInstance();
     const express = loadPackage('express', 'ServeStaticModule', () =>
       require('express')
     );
-    const clientPath = options.rootPath;
-    const indexFilePath = this.getIndexFilePath(clientPath);
 
-    app.use(express.static(clientPath, options.serveStaticOptions));
-    app.get(options.renderPath, (req: any, res: any) =>
-      res.sendFile(indexFilePath)
-    );
+    options.forEach(option => {
+      const clientPath = option.rootPath;
+      const indexFilePath = this.getIndexFilePath(clientPath);
+
+      app.use(express.static(clientPath, option.serveStaticOptions));
+
+      app.get(option.renderPath, (req: any, res: any) =>
+        res.sendFile(indexFilePath)
+      );
+    });
   }
 }

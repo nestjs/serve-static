@@ -7,6 +7,6 @@ import { AbstractLoader } from './abstract.loader';
 export class NoopLoader extends AbstractLoader {
   public register(
     httpAdapter: AbstractHttpAdapter,
-    options: ServeStaticModuleOptions
+    options: ServeStaticModuleOptions[]
   ) {}
 }
