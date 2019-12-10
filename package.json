@@ -18,8 +18,8 @@
     "@nestjs/core": "^6.0.0"
   },
   "devDependencies": {
-    "@nestjs/common": "6.10.8",
-    "@nestjs/core": "6.10.8",
+    "@nestjs/common": "6.10.9",
+    "@nestjs/core": "6.10.9",
     "@types/node": "12.12.16",
     "reflect-metadata": "0.1.13",
     "rxjs": "6.5.3",
