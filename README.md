@@ -26,7 +26,7 @@
 
 ## Description
 
-`@nestjs/serve-static` package for [Nest](https://github.com/nestjs/nest), useful to serve static content like a Single Page Application (SPA). However, if you are building MVC application or you want to simply serve assets files, you can simply use the `useStaticAssets()` method (read more [here](https://docs.nestjs.com/techniques/mvc)).
+`@nestjs/serve-static` package for [Nest](https://github.com/nestjs/nest), useful to serve static content like a Single Page Application (SPA). However, if you are building MVC application or you want to serve assets files (images, docs), you can simply use the `useStaticAssets()` method (read more [here](https://docs.nestjs.com/techniques/mvc)).
 
 ## Installation
 
