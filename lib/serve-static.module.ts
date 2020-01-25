@@ -23,6 +23,7 @@ export class ServeStaticModule implements OnModuleInit {
   public static forRoot(
     _options: ServeStaticModuleOptions | ServeStaticModuleOptions[] = {}
   ): DynamicModule {
+    // We support an object as options param, due to backwards-compatibility reasons.
     let options = Array.isArray(_options) ? _options : [_options];
     options = options.map<ServeStaticModuleOptions>(option => ({
       rootPath: DEFAULT_ROOT_PATH,
