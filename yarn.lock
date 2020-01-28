@@ -25,20 +25,20 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
-"@nestjs/common@6.11.2":
-  version "6.11.2"
-  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-6.11.2.tgz#7982de63f899b34b3066aad1942cf2e1ccc33cfa"
-  integrity sha512-5SpqqQ5dZiRkzK84JlJJk4CKG5ECqOPqPsAFBk4CwE98LP3nIeLUBT8KLcTn4FKhK8Ih68zKfmpdBf4821dvNg==
+"@nestjs/common@6.11.3":
+  version "6.11.3"
+  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-6.11.3.tgz#96c1943d29a940ef043268fb9d23bea9ae20d950"
+  integrity sha512-XZ7/XmOpHqQqAmD2yYX2yvB13Qm8S+Xwv8/egCCvVUjMRSk6DoizHc/awpT1ddc1Tevt3fQS8qwhELs1Jkm89g==
   dependencies:
     axios "0.19.2"
     cli-color "2.0.0"
     tslib "1.10.0"
     uuid "3.4.0"
 
-"@nestjs/core@6.11.2":
-  version "6.11.2"
-  resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-6.11.2.tgz#b5ea1ea519050e170e831f43cbef87512239cb70"
-  integrity sha512-8BZd2ow1LGeN7mEjN/njpZKjRU7Fjq+lU4TE7nbpx7+Beogs/a5cElKr2WsoU0Ke6Jpy/2sx+K6uJr7OtqYqyg==
+"@nestjs/core@6.11.3":
+  version "6.11.3"
+  resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-6.11.3.tgz#d4ea0c64e5aeb9f675daf70b600977019df3c19e"
+  integrity sha512-tKQr0XozUgpBWsvRoMtPFFcF9pM1teUdoPRPZ49JjIBa5zydWeh+BjpP4P06QnyITgRI6nBwSB7AiYubbeHydQ==
   dependencies:
     "@nuxtjs/opencollective" "0.2.2"
     fast-safe-stringify "2.0.7"
