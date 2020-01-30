@@ -25,7 +25,7 @@
     "rxjs": "6.5.4",
     "express": "4.17.1",
     "husky": "4.2.1",
-    "lint-staged": "10.0.4",
+    "lint-staged": "10.0.5",
     "prettier": "1.19.1",
     "typescript": "3.7.5"
   },
