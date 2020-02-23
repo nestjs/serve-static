@@ -3,6 +3,10 @@ import { loadPackage } from '@nestjs/common/utils/load-package.util';
 import { AbstractHttpAdapter } from '@nestjs/core';
 import * as fs from 'fs';
 import { ServeStaticModuleOptions } from '../interfaces/serve-static-options.interface';
+import {
+  DEFAULT_RENDER_PATH,
+  DEFAULT_ROOT_PATH
+} from '../serve-static.constants';
 import { validatePath } from '../utils/validate-path.util';
 import { AbstractLoader } from './abstract.loader';
 
@@ -20,9 +24,11 @@ export class FastifyLoader extends AbstractLoader {
     );
 
     optionsArr.forEach(options => {
+      options.renderPath = options.renderPath || DEFAULT_RENDER_PATH;
+
       const { setHeaders, redirect, ...send } =
         options.serveStaticOptions || ({} as any);
-      const clientPath = options.rootPath;
+      const clientPath = options.rootPath || DEFAULT_ROOT_PATH;
       const indexFilePath = this.getIndexFilePath(clientPath);
 
       if (options.serveRoot) {

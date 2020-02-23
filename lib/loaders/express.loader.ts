@@ -2,6 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { loadPackage } from '@nestjs/common/utils/load-package.util';
 import { AbstractHttpAdapter } from '@nestjs/core';
 import { ServeStaticModuleOptions } from '../interfaces/serve-static-options.interface';
+import {
+  DEFAULT_RENDER_PATH,
+  DEFAULT_ROOT_PATH
+} from '../serve-static.constants';
 import { isRouteExcluded } from '../utils/is-route-excluded.util';
 import { validatePath } from '../utils/validate-path.util';
 import { AbstractLoader } from './abstract.loader';
@@ -17,7 +21,8 @@ export class ExpressLoader extends AbstractLoader {
       require('express')
     );
     optionsArr.forEach(options => {
-      const clientPath = options.rootPath;
+      options.renderPath = options.renderPath || DEFAULT_RENDER_PATH;
+      const clientPath = options.rootPath || DEFAULT_ROOT_PATH;
       const indexFilePath = this.getIndexFilePath(clientPath);
 
       const renderFn = (req: unknown, res: any, next: Function) => {

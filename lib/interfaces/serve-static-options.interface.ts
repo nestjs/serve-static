@@ -1,3 +1,6 @@
+import { Provider, Type } from '@nestjs/common';
+import { ModuleMetadata } from '@nestjs/common/interfaces';
+
 export interface ServeStaticModuleOptions {
   /**
    * Static files root directory. Default: "client"
@@ -90,4 +93,22 @@ export interface ServeStaticModuleOptions {
      */
     setHeaders?: (res: any, path: string, stat: any) => any;
   };
+}
+
+export interface ServeStaticModuleOptionsFactory {
+  createLoggerOptions():
+    | Promise<ServeStaticModuleOptions[]>
+    | ServeStaticModuleOptions[];
+}
+
+export interface ServeStaticModuleAsyncOptions
+  extends Pick<ModuleMetadata, 'imports'> {
+  isGlobal?: boolean;
+  useExisting?: Type<ServeStaticModuleOptionsFactory>;
+  useClass?: Type<ServeStaticModuleOptionsFactory>;
+  useFactory?: (
+    ...args: any[]
+  ) => Promise<ServeStaticModuleOptions[]> | ServeStaticModuleOptions[];
+  inject?: any[];
+  extraProviders?: Provider[];
 }
