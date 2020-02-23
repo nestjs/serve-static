@@ -10,7 +10,7 @@ import { AbstractLoader } from './abstract.loader';
 export class FastifyLoader extends AbstractLoader {
   public register(
     httpAdapter: AbstractHttpAdapter,
-    options: ServeStaticModuleOptions
+    optionsArr: ServeStaticModuleOptions[]
   ) {
     const app = httpAdapter.getInstance();
     const fastifyStatic = loadPackage(
@@ -18,38 +18,41 @@ export class FastifyLoader extends AbstractLoader {
       'ServeStaticModule',
       () => require('fastify-static')
     );
-    const { setHeaders, redirect, ...send } =
-      options.serveStaticOptions || ({} as any);
-    const clientPath = options.rootPath;
-    const indexFilePath = this.getIndexFilePath(clientPath);
 
-    if (options.serveRoot) {
-      app.register(fastifyStatic, {
-        root: clientPath,
-        setHeaders,
-        redirect,
-        send,
-        wildcard: false,
-        prefix: options.serveRoot
-      });
+    optionsArr.forEach(options => {
+      const { setHeaders, redirect, ...send } =
+        options.serveStaticOptions || ({} as any);
+      const clientPath = options.rootPath;
+      const indexFilePath = this.getIndexFilePath(clientPath);
 
-      const renderPath = options.serveRoot + validatePath(options.renderPath);
-      app.get(renderPath, (req: any, res: any) => {
-        const stream = fs.createReadStream(indexFilePath);
-        res.type('text/html').send(stream);
-      });
-    } else {
-      app.register(fastifyStatic, {
-        root: clientPath,
-        setHeaders,
-        redirect,
-        send,
-        wildcard: false
-      });
-      app.get(options.renderPath, (req: any, res: any) => {
-        const stream = fs.createReadStream(indexFilePath);
-        res.type('text/html').send(stream);
-      });
-    }
+      if (options.serveRoot) {
+        app.register(fastifyStatic, {
+          root: clientPath,
+          setHeaders,
+          redirect,
+          send,
+          wildcard: false,
+          prefix: options.serveRoot
+        });
+
+        const renderPath = options.serveRoot + validatePath(options.renderPath);
+        app.get(renderPath, (req: any, res: any) => {
+          const stream = fs.createReadStream(indexFilePath);
+          res.type('text/html').send(stream);
+        });
+      } else {
+        app.register(fastifyStatic, {
+          root: clientPath,
+          setHeaders,
+          redirect,
+          send,
+          wildcard: false
+        });
+        app.get(options.renderPath, (req: any, res: any) => {
+          const stream = fs.createReadStream(indexFilePath);
+          res.type('text/html').send(stream);
+        });
+      }
+    });
   }
 }

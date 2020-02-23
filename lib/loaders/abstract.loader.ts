@@ -7,7 +7,7 @@ import { ServeStaticModuleOptions } from '../interfaces/serve-static-options.int
 export abstract class AbstractLoader {
   public abstract register(
     httpAdapter: AbstractHttpAdapter,
-    options: ServeStaticModuleOptions
+    options: ServeStaticModuleOptions[]
   );
 
   public getIndexFilePath(clientPath: string): string {
