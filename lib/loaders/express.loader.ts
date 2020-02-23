@@ -10,33 +10,39 @@ import { AbstractLoader } from './abstract.loader';
 export class ExpressLoader extends AbstractLoader {
   public register(
     httpAdapter: AbstractHttpAdapter,
-    options: ServeStaticModuleOptions
+    optionsArr: ServeStaticModuleOptions[]
   ) {
     const app = httpAdapter.getInstance();
     const express = loadPackage('express', 'ServeStaticModule', () =>
       require('express')
     );
-    const clientPath = options.rootPath;
-    const indexFilePath = this.getIndexFilePath(clientPath);
+    optionsArr.forEach(options => {
+      const clientPath = options.rootPath;
+      const indexFilePath = this.getIndexFilePath(clientPath);
 
-    const renderFn = (req: unknown, res: any, next: Function) => {
-      if (!isRouteExcluded(req, options.exclude)) {
-        res.sendFile(indexFilePath);
+      const renderFn = (req: unknown, res: any, next: Function) => {
+        if (!isRouteExcluded(req, options.exclude)) {
+          res.sendFile(indexFilePath);
+        } else {
+          next();
+        }
+      };
+
+      if (options.serveRoot) {
+        app.use(
+          options.serveRoot,
+          express.static(clientPath, options.serveStaticOptions)
+        );
+        const renderPath =
+          typeof options.serveRoot === 'string'
+            ? options.serveRoot + validatePath(options.renderPath as string)
+            : options.serveRoot;
+
+        app.get(renderPath, renderFn);
       } else {
-        next();
+        app.use(express.static(clientPath, options.serveStaticOptions));
+        app.get(options.renderPath, renderFn);
       }
-    };
-
-    if (options.serveRoot) {
-      app.use(
-        options.serveRoot,
-        express.static(clientPath, options.serveStaticOptions)
-      );
-      const renderPath = options.serveRoot + validatePath(options.renderPath);
-      app.get(renderPath, renderFn);
-    } else {
-      app.use(express.static(clientPath, options.serveStaticOptions));
-      app.get(options.renderPath, renderFn);
-    }
+    });
   }
 }
