@@ -1,12 +1,20 @@
 export interface ServeStaticModuleOptions {
   /**
-   * Static files root directory. Default: "client/dist"
+   * Static files root directory. Default: "client"
    */
   rootPath?: string;
   /**
-   * Path to render static app. Default: * (wildcard - all paths)
+   * Path to render static app (concatenated with the `serveRoot` value). Default: * (wildcard - all paths)
    */
   renderPath?: string;
+  /**
+   * Root path under which static app will be served. Default: ""
+   */
+  serveRoot?: string;
+  /**
+   * Paths to exclude when serving the static app. WARNING! Not supported by `fastify`. If you use `fastify`, you can exclude routes using regexp instead (e.g., to exclude `/api`, set the `renderPath` to `'/^(?!api)(.+)'`).
+   */
+  exclude?: string[];
   /**
    * Serve static options (static files)
    * Passed down to the underlying either `express.static` or `fastify-static.send`

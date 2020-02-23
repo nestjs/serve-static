@@ -21,12 +21,14 @@
     "@nestjs/common": "6.10.2",
     "@nestjs/core": "6.10.2",
     "@types/node": "12.12.14",
-    "reflect-metadata": "0.1.13",
-    "rxjs": "6.5.3",
     "express": "4.17.1",
+    "fastify": "^2.12.0",
+    "fastify-static": "^2.6.0",
     "husky": "3.1.0",
     "lint-staged": "9.5.0",
     "prettier": "1.19.1",
+    "reflect-metadata": "0.1.13",
+    "rxjs": "6.5.3",
     "typescript": "3.7.2"
   },
   "lint-staged": {
@@ -34,5 +36,8 @@
       "prettier --write",
       "git add"
     ]
+  },
+  "dependencies": {
+    "path-to-regexp": "^0.1.7"
   }
 }

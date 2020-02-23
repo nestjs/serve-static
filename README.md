@@ -50,9 +50,9 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'client'),
-    }),
-  ],
+      rootPath: join(__dirname, '..', 'client')
+    })
+  ]
 })
 export class ApplicationModule {}
 ```
@@ -61,11 +61,13 @@ export class ApplicationModule {}
 
 The `forRoot()` method takes an options object with a few useful properties.
 
-| Property        | Type           | Description  |
-| ------------- | ------------- | ----- |
-| `rootPath`      | string | Static files root directory. Default: "client/dist"|
-| `renderPath`      | string |   Path to render static app. Default: * (wildcard - all paths)|
-| `serveStaticOptions` | Object | Serve static options (static files) |
+| Property             | Type     | Description                                                                                                                                                                                                                |
+| -------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `rootPath`           | string   | Static files root directory. Default: "client/dist"                                                                                                                                                                        |
+| `serveRoot`          | string   | Root path under which static app will be served. Default: ""                                                                                                                                                               |
+| `renderPath`         | string   | Path to render static app (concatenated with the `serveRoot` value). Default: \* (wildcard - all paths)                                                                                                                    |
+| `exclude`            | string[] | Paths to exclude when serving the static app. WARNING! Not supported by `fastify`. If you use `fastify`, you can exclude routes using regexp instead (e.g., to exclude `/api`, set the `renderPath` to `'/^(?!api)(.+)'`). |
+| `serveStaticOptions` | Object   | Serve static options (static files)                                                                                                                                                                                        |
 
 ## Support
 
@@ -73,9 +75,9 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## Stay in touch
 
-* Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-* Website - [https://nestjs.com](https://nestjs.com/)
-* Twitter - [@nestframework](https://twitter.com/nestframework)
+- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
