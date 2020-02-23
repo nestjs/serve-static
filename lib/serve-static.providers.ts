@@ -22,6 +22,6 @@ export const serveStaticProviders: Provider[] = [
       }
       return new ExpressLoader();
     },
-    inject: [HttpAdapterHost],
-  },
+    inject: [HttpAdapterHost]
+  }
 ];

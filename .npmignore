@@ -8,3 +8,14 @@ tsconfig.json
 
 # misc
 .DS_Store
+
+# misc
+.commitlintrc.json
+.release-it.json
+.eslintignore
+.eslintrc.js
+
+# github
+.github
+CONTRIBUTING.md
+renovate.json
