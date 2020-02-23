@@ -18,18 +18,18 @@
     "@nestjs/core": "^6.0.0"
   },
   "devDependencies": {
-    "@nestjs/common": "6.10.2",
-    "@nestjs/core": "6.10.2",
-    "@types/node": "12.12.14",
+    "@nestjs/common": "6.11.8",
+    "@nestjs/core": "6.11.8",
+    "@types/node": "12.12.21",
+    "reflect-metadata": "0.1.13",
+    "rxjs": "6.5.4",
     "express": "4.17.1",
     "fastify": "^2.12.0",
     "fastify-static": "^2.6.0",
-    "husky": "3.1.0",
-    "lint-staged": "9.5.0",
+    "husky": "4.2.3",
+    "lint-staged": "10.0.7",
     "prettier": "1.19.1",
-    "reflect-metadata": "0.1.13",
-    "rxjs": "6.5.3",
-    "typescript": "3.7.2"
+    "typescript": "3.8.2"
   },
   "lint-staged": {
     "*.ts": [
