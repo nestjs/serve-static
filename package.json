@@ -38,6 +38,6 @@
     ]
   },
   "dependencies": {
-    "path-to-regexp": "0.1.7"
+    "path-to-regexp": "0.2.5"
   }
 }
