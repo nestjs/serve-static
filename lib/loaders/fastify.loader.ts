@@ -35,7 +35,11 @@ export class FastifyLoader extends AbstractLoader {
           prefix: options.serveRoot
         });
 
-        const renderPath = options.serveRoot + validatePath(options.renderPath);
+        const renderPath =
+          typeof options.serveRoot === 'string'
+            ? options.serveRoot + validatePath(options.renderPath as string)
+            : options.serveRoot;
+
         app.get(renderPath, (req: any, res: any) => {
           const stream = fs.createReadStream(indexFilePath);
           res.type('text/html').send(stream);

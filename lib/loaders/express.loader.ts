@@ -33,7 +33,11 @@ export class ExpressLoader extends AbstractLoader {
           options.serveRoot,
           express.static(clientPath, options.serveStaticOptions)
         );
-        const renderPath = options.serveRoot + validatePath(options.renderPath);
+        const renderPath =
+          typeof options.serveRoot === 'string'
+            ? options.serveRoot + validatePath(options.renderPath as string)
+            : options.serveRoot;
+
         app.get(renderPath, renderFn);
       } else {
         app.use(express.static(clientPath, options.serveStaticOptions));
