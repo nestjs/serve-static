@@ -37,7 +37,7 @@
     "fastify": "2.12.0",
     "fastify-static": "2.6.0",
     "husky": "4.2.3",
-    "lint-staged": "10.0.7",
+    "lint-staged": "10.0.8",
     "prettier": "1.19.1",
     "release-it": "12.6.1",
     "typescript": "3.8.2"
