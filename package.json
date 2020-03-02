@@ -58,6 +58,6 @@
     "url": "https://github.com/nestjs/serve-static"
   },
   "dependencies": {
-    "path-to-regexp": "0.2.5"
+    "path-to-regexp": "0.1.7"
   }
 }
