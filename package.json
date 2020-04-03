@@ -32,7 +32,7 @@
     "eslint-config-prettier": "6.10.1",
     "eslint-plugin-import": "2.20.2",
     "reflect-metadata": "0.1.13",
-    "rxjs": "6.5.4",
+    "rxjs": "6.5.5",
     "express": "4.17.1",
     "fastify": "2.13.0",
     "fastify-static": "2.6.0",
