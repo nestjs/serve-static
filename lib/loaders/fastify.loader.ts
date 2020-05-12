@@ -23,7 +23,7 @@ export class FastifyLoader extends AbstractLoader {
       () => require('fastify-static')
     );
 
-    optionsArr.forEach((options) => {
+    optionsArr.forEach(options => {
       options.renderPath = options.renderPath || DEFAULT_RENDER_PATH;
 
       const clientPath = options.rootPath || DEFAULT_ROOT_PATH;
@@ -32,7 +32,7 @@ export class FastifyLoader extends AbstractLoader {
       if (options.serveRoot) {
         app.register(fastifyStatic, {
           root: clientPath,
-          ...options.serveStaticOptions,
+          ...(options.serveStaticOptions || {}),
           wildcard: false,
           prefix: options.serveRoot
         });
@@ -49,7 +49,7 @@ export class FastifyLoader extends AbstractLoader {
       } else {
         app.register(fastifyStatic, {
           root: clientPath,
-          ...options.serveStaticOptions,
+          ...(options.serveStaticOptions || {}),
           wildcard: false
         });
         app.get(options.renderPath, (req: any, res: any) => {
