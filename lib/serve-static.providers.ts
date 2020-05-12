@@ -9,7 +9,7 @@ export const serveStaticProviders: Provider[] = [
   {
     provide: AbstractLoader,
     useFactory: (httpAdapterHost: HttpAdapterHost) => {
-      if (!httpAdapterHost) {
+      if (!httpAdapterHost || !httpAdapterHost.httpAdapter) {
         return new NoopLoader();
       }
       const httpAdapter = httpAdapterHost.httpAdapter;
