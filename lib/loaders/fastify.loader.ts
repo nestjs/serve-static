@@ -23,20 +23,16 @@ export class FastifyLoader extends AbstractLoader {
       () => require('fastify-static')
     );
 
-    optionsArr.forEach(options => {
+    optionsArr.forEach((options) => {
       options.renderPath = options.renderPath || DEFAULT_RENDER_PATH;
 
-      const { setHeaders, redirect, ...send } =
-        options.serveStaticOptions || ({} as any);
       const clientPath = options.rootPath || DEFAULT_ROOT_PATH;
       const indexFilePath = this.getIndexFilePath(clientPath);
 
       if (options.serveRoot) {
         app.register(fastifyStatic, {
           root: clientPath,
-          setHeaders,
-          redirect,
-          send,
+          ...options.serveStaticOptions,
           wildcard: false,
           prefix: options.serveRoot
         });
@@ -53,9 +49,7 @@ export class FastifyLoader extends AbstractLoader {
       } else {
         app.register(fastifyStatic, {
           root: clientPath,
-          setHeaders,
-          redirect,
-          send,
+          ...options.serveStaticOptions,
           wildcard: false
         });
         app.get(options.renderPath, (req: any, res: any) => {
