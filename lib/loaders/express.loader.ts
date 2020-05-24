@@ -58,7 +58,7 @@ export class ExpressLoader extends AbstractLoader {
       }
 
       app.use((err: Error, req, res, next: Function) => {
-        if (err.message.includes('ENOENT')) {
+        if (err.message != undefined && err.message.includes('ENOENT')) {
           res.setStatus(HttpStatus.NOT_FOUND);
         }
 
