@@ -54,6 +54,13 @@ export class FastifyLoader extends AbstractLoader {
         });
         app.get(options.renderPath, (req: any, res: any) => {
           const stream = fs.createReadStream(indexFilePath);
+          if (
+            options.serveStaticOptions &&
+            options.serveStaticOptions.setHeaders
+          ) {
+            const stat = fs.statSync(indexFilePath);
+            options.serveStaticOptions.setHeaders(res, indexFilePath, stat);
+          }
           res.type('text/html').send(stream);
         });
       }

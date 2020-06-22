@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { loadPackage } from '@nestjs/common/utils/load-package.util';
+import * as fs from 'fs';
 import { AbstractHttpAdapter } from '@nestjs/core';
 import { ServeStaticModuleOptions } from '../interfaces/serve-static-options.interface';
 import {
@@ -27,6 +28,13 @@ export class ExpressLoader extends AbstractLoader {
 
       const renderFn = (req: unknown, res: any, next: Function) => {
         if (!isRouteExcluded(req, options.exclude)) {
+          if (
+            options.serveStaticOptions &&
+            options.serveStaticOptions.setHeaders
+          ) {
+            const stat = fs.statSync(indexFilePath);
+            options.serveStaticOptions.setHeaders(res, indexFilePath, stat);
+          }
           res.sendFile(indexFilePath);
         } else {
           next();
