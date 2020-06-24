@@ -1,4 +1,4 @@
-import { Injectable, HttpStatus } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { loadPackage } from '@nestjs/common/utils/load-package.util';
 import * as fs from 'fs';
 import { AbstractHttpAdapter } from '@nestjs/core';
@@ -58,7 +58,7 @@ export class ExpressLoader extends AbstractLoader {
       }
 
       app.use((err: Error, req, res, next: Function) => {
-        if (err.message != undefined && err.message.includes('ENOENT')) {
+        if (err?.message?.includes('ENOENT')) {
           return res.send(new NotFoundException(err.message));
         }
 
