@@ -35,7 +35,12 @@ export class ExpressLoader extends AbstractLoader {
             const stat = fs.statSync(indexFilePath);
             options.serveStaticOptions.setHeaders(res, indexFilePath, stat);
           }
-          res.sendFile(indexFilePath);
+          res.sendFile(indexFilePath, null, (err: Error) => {
+            if (err) {
+              const error = new NotFoundException(err.message);
+              res.status(error.getStatus()).send(error.getResponse());
+            }
+          });
         } else {
           next();
         }
@@ -56,14 +61,6 @@ export class ExpressLoader extends AbstractLoader {
         app.use(express.static(clientPath, options.serveStaticOptions));
         app.get(options.renderPath, renderFn);
       }
-
-      app.use((err: Error, req, res, next: Function) => {
-        if (err?.message?.includes('ENOENT')) {
-          return res.send(new NotFoundException(err.message));
-        }
-
-        next(err);
-      });
     });
   }
 }
