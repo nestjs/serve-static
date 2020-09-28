@@ -30,7 +30,7 @@
     "@typescript-eslint/parser": "4.2.0",
     "eslint": "7.10.0",
     "eslint-config-prettier": "6.12.0",
-    "eslint-plugin-import": "2.22.0",
+    "eslint-plugin-import": "2.22.1",
     "reflect-metadata": "0.1.13",
     "rxjs": "6.6.3",
     "express": "4.17.1",
