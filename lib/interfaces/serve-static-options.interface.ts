@@ -47,6 +47,11 @@ export interface ServeStaticModuleOptions {
     etag?: boolean;
 
     /**
+     * Enable or disable client setting errors fall-through as unhandled requests, defaults to true, otherwise forward a client error.
+     */
+    fallthrough?: boolean;
+    
+    /**
      * Set file extension fallbacks. When set, if a file is not found, the given extensions
      * will be added to the file name and search for.
      * The first that exists will be served. Example: ['html', 'htm'].
