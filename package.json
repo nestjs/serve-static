@@ -36,7 +36,7 @@
     "express": "4.17.1",
     "fastify": "3.18.1",
     "fastify-static": "4.2.2",
-    "husky": "6.0.0",
+    "husky": "7.0.0",
     "lint-staged": "11.0.0",
     "prettier": "2.3.2",
     "release-it": "14.10.0",
