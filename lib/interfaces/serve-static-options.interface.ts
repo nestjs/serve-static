@@ -7,7 +7,7 @@ export interface ServeStaticModuleOptions {
    */
   rootPath?: string;
   /**
-   * Path to render static app (concatenated with the `serveRoot` value). Default: * (wildcard - all paths)
+   * Path to render static app (concatenated with the `serveRoot` value). Default: * (wildcard - all paths). Note: `RegExp` is not supported by the `@nestjs/platform-fastify`.
    */
   renderPath?: string | RegExp;
   /**
@@ -50,7 +50,7 @@ export interface ServeStaticModuleOptions {
      * Enable or disable client setting errors fall-through as unhandled requests, defaults to true, otherwise forward a client error.
      */
     fallthrough?: boolean;
-    
+
     /**
      * Set file extension fallbacks. When set, if a file is not found, the given extensions
      * will be added to the file name and search for.

@@ -65,7 +65,7 @@ The `forRoot()` method takes an options object with a few useful properties.
 | -------------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `rootPath`           | string          | Static files root directory. Default: `"client"`                                                                                                                                                     |
 | `serveRoot`          | string          | Root path under which static app will be served. Default: `""`                                                                                                                                       |
-| `renderPath`         | string / RegExp | Path to render static app (concatenated with the `serveRoot` value). Default: \* (wildcard - all paths)                                                                                              |
+| `renderPath`         | string / RegExp | Path to render static app (concatenated with the `serveRoot` value). Default: \* (wildcard - all paths). Note: `RegExp` is not supported by the `@nestjs/platform-fastify`.                          |
 | `exclude`            | string[]        | Paths to exclude when serving the static app. WARNING! Not supported by `fastify`. If you use `fastify`, you can exclude routes using regexp (set the `renderPath` to a regular expression) instead. |
 | `serveStaticOptions` | Object          | Serve static options (static files)                                                                                                                                                                  |
 
