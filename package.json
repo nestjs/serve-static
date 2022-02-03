@@ -34,7 +34,7 @@
     "reflect-metadata": "0.1.13",
     "rxjs": "7.5.2",
     "express": "4.17.2",
-    "fastify": "3.27.0",
+    "fastify": "3.27.1",
     "fastify-static": "4.5.0",
     "husky": "7.0.4",
     "lint-staged": "12.3.3",
