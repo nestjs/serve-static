@@ -33,7 +33,7 @@
     "eslint-plugin-import": "2.25.4",
     "reflect-metadata": "0.1.13",
     "rxjs": "7.5.4",
-    "express": "4.17.2",
+    "express": "4.17.3",
     "fastify": "3.27.1",
     "fastify-static": "4.5.0",
     "husky": "7.0.4",
