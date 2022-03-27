@@ -23,7 +23,7 @@ export class FastifyLoader extends AbstractLoader {
       () => require('fastify-static')
     );
 
-    optionsArr.forEach(options => {
+    optionsArr.filter(options => !(options.enabled === false)).forEach(options => {
       options.renderPath = options.renderPath || DEFAULT_RENDER_PATH;
 
       const clientPath = options.rootPath || DEFAULT_ROOT_PATH;

@@ -3,6 +3,10 @@ import { ModuleMetadata } from '@nestjs/common/interfaces';
 
 export interface ServeStaticModuleOptions {
   /**
+   * Whether static file serving is enabled. Default: true
+   */
+  enabled?: boolean;
+  /**
    * Static files root directory. Default: "client"
    */
   rootPath?: string;
