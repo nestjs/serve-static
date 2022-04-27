@@ -35,7 +35,7 @@
     "rxjs": "7.5.5",
     "express": "4.18.0",
     "fastify": "3.28.0",
-    "fastify-static": "4.6.1",
+    "fastify-static": "4.7.0",
     "husky": "7.0.4",
     "lint-staged": "12.4.1",
     "prettier": "2.6.2",
