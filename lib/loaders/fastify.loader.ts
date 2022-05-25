@@ -18,12 +18,12 @@ export class FastifyLoader extends AbstractLoader {
   ) {
     const app = httpAdapter.getInstance();
     const fastifyStatic = loadPackage(
-      'fastify-static',
+      '@fastify/static',
       'ServeStaticModule',
-      () => require('fastify-static')
+      () => require('@fastify/static')
     );
 
-    optionsArr.forEach(options => {
+    optionsArr.forEach((options) => {
       options.renderPath = options.renderPath || DEFAULT_RENDER_PATH;
 
       const clientPath = options.rootPath || DEFAULT_ROOT_PATH;
