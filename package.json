@@ -28,7 +28,7 @@
     "@types/node": "16.11.41",
     "@typescript-eslint/eslint-plugin": "5.28.0",
     "@typescript-eslint/parser": "5.28.0",
-    "eslint": "8.17.0",
+    "eslint": "8.18.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-import": "2.26.0",
     "express": "4.18.1",
@@ -40,7 +40,7 @@
     "reflect-metadata": "0.1.13",
     "release-it": "15.0.0",
     "rxjs": "7.5.5",
-    "typescript": "4.7.3"
+    "typescript": "4.7.4"
   },
   "lint-staged": {
     "*.ts": [
