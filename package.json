@@ -19,7 +19,8 @@
   },
   "peerDependencies": {
     "@nestjs/common": "^9.0.0",
-    "@nestjs/core": "^9.0.0"
+    "@nestjs/core": "^9.0.0",
+    "express": "^4.8.1"
   },
   "devDependencies": {
     "@commitlint/cli": "17.1.2",
