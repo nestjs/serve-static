@@ -20,7 +20,20 @@
   "peerDependencies": {
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
-    "express": "^4.8.1"
+    "express": "^4.18.1",
+    "fastify": "^4.7.0",
+    "@fastify/static": "^6.5.0"
+  },
+  "peerDependenciesMeta": {
+    "express": {
+      "optional": true
+    },
+    "fastify": {
+      "optional": true
+    },
+    "@fastify/static": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@commitlint/cli": "17.1.2",
