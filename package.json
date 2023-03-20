@@ -51,7 +51,7 @@
     "@fastify/static": "6.9.0",
     "husky": "8.0.3",
     "lint-staged": "13.2.0",
-    "prettier": "2.8.4",
+    "prettier": "2.8.5",
     "reflect-metadata": "0.1.13",
     "release-it": "15.9.0",
     "rxjs": "7.8.0",
