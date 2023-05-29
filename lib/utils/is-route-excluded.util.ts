@@ -2,7 +2,7 @@ import * as pathToRegexp from 'path-to-regexp';
 
 export const isRouteExcluded = (req: any, paths: string[] = []) => {
   return paths.some(path => {
-    const re = pathToRegexp(path);
+    const re = pathToRegexp(path, [], { delimiter: '/' });
     const queryParamsIndex = req.originalUrl.indexOf('?');
     const pathname =
       queryParamsIndex >= 0
