@@ -52,7 +52,7 @@
     "husky": "8.0.3",
     "lint-staged": "15.2.2",
     "prettier": "3.2.5",
-    "reflect-metadata": "0.1.13",
+    "reflect-metadata": "0.2.1",
     "release-it": "16.3.0",
     "rxjs": "7.8.1",
     "typescript": "5.2.2"
