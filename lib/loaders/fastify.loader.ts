@@ -37,7 +37,7 @@ export class FastifyLoader extends AbstractLoader {
         options.useGlobalPrefix &&
         validateGlobalPrefix(globalPrefix)
       ) {
-        options.serveRoot = `/${globalPrefix}`;
+        options.serveRoot = `/${globalPrefix}${options.serveRoot || ''}`;
       }
 
       if (options.serveRoot) {
