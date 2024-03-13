@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { loadPackage } from '@nestjs/common/utils/load-package.util';
 import * as fs from 'fs';
-import { AbstractHttpAdapter } from '@nestjs/core';
+import { AbstractHttpAdapter, ApplicationConfig } from '@nestjs/core';
 import { ServeStaticModuleOptions } from '../interfaces/serve-static-options.interface';
 import {
   DEFAULT_RENDER_PATH,
@@ -10,18 +10,21 @@ import {
 import { isRouteExcluded } from '../utils/is-route-excluded.util';
 import { validatePath } from '../utils/validate-path.util';
 import { AbstractLoader } from './abstract.loader';
+import { validateGlobalPrefix } from '../utils/validate-global-prefix.util';
 
 @Injectable()
 export class ExpressLoader extends AbstractLoader {
   public register(
     httpAdapter: AbstractHttpAdapter,
+    config: ApplicationConfig,
     optionsArr: ServeStaticModuleOptions[]
   ) {
     const app = httpAdapter.getInstance();
+    const globalPrefix = config.getGlobalPrefix();
     const express = loadPackage('express', 'ServeStaticModule', () =>
       require('express')
     );
-    optionsArr.forEach(options => {
+    optionsArr.forEach((options) => {
       options.renderPath = options.renderPath || DEFAULT_RENDER_PATH;
       const clientPath = options.rootPath || DEFAULT_ROOT_PATH;
       const indexFilePath = this.getIndexFilePath(clientPath);
@@ -41,6 +44,13 @@ export class ExpressLoader extends AbstractLoader {
         }
       };
 
+      if (
+        globalPrefix &&
+        options.useGlobalPrefix &&
+        validateGlobalPrefix(globalPrefix)
+      ) {
+        options.serveRoot = `/${globalPrefix}`;
+      }
       if (options.serveRoot) {
         app.use(
           options.serveRoot,
