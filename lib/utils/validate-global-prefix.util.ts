@@ -4,4 +4,4 @@
  * @returns {boolean} Returns true if the prefix is valid, false otherwise.
  */
 export const validateGlobalPrefix = (globalPrefix: string): boolean =>
-  globalPrefix && !globalPrefix.match(/^(\/?)$/);
+  !globalPrefix.match(/^(\/?)$/);
