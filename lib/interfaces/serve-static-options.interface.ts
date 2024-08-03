@@ -90,6 +90,11 @@ export interface ServeStaticModuleOptions {
     redirect?: boolean;
 
     /**
+     * Allow multiple URLs to be served from a single root by setting this option to true when using Fastify.
+     */
+    decorateReply?: boolean;
+
+    /**
      * Function to set custom headers on response. Alterations to the headers need to occur synchronously.
      * The function is called as fn(res, path, stat), where the arguments are:
      * res the response object
