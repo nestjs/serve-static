@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { loadPackage } from '@nestjs/common/utils/load-package.util';
 import * as fs from 'fs';
 import { AbstractHttpAdapter } from '@nestjs/core';
@@ -21,7 +21,7 @@ export class ExpressLoader extends AbstractLoader {
     const express = loadPackage('express', 'ServeStaticModule', () =>
       require('express')
     );
-    optionsArr.forEach(options => {
+    optionsArr.forEach((options) => {
       options.renderPath = options.renderPath || DEFAULT_RENDER_PATH;
       const clientPath = options.rootPath || DEFAULT_ROOT_PATH;
       const indexFilePath = this.getIndexFilePath(clientPath);
@@ -35,7 +35,12 @@ export class ExpressLoader extends AbstractLoader {
             const stat = fs.statSync(indexFilePath);
             options.serveStaticOptions.setHeaders(res, indexFilePath, stat);
           }
-          res.sendFile(indexFilePath);
+          res.sendFile(indexFilePath, null, (err: Error) => {
+            if (err) {
+              const error = new NotFoundException(err.message);
+              res.status(error.getStatus()).send(error.getResponse());
+            }
+          });
         } else {
           next();
         }
