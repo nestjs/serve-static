@@ -11,6 +11,12 @@ export interface ServeStaticModuleOptions {
    */
   renderPath?: string | RegExp;
   /**
+   * If `true`, static app will be prefixed by the global prefix set through `setGlobalPrefix()`.
+   * Default: `false`.
+   * @see https://docs.nestjs.com/faq/global-prefix
+   */
+  useGlobalPrefix?: boolean;
+  /**
    * Root path under which static app will be served. Default: ""
    */
   serveRoot?: string;
