@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AbstractHttpAdapter } from '@nestjs/core';
+import { AbstractHttpAdapter, ApplicationConfig } from '@nestjs/core';
 import { join } from 'path';
 import { ServeStaticModuleOptions } from '../interfaces/serve-static-options.interface';
 
@@ -7,6 +7,7 @@ import { ServeStaticModuleOptions } from '../interfaces/serve-static-options.int
 export abstract class AbstractLoader {
   public abstract register(
     httpAdapter: AbstractHttpAdapter,
+    config: ApplicationConfig,
     options: ServeStaticModuleOptions[]
   );
 

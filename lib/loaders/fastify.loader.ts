@@ -1,12 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { loadPackage } from '@nestjs/common/utils/load-package.util';
-import { AbstractHttpAdapter } from '@nestjs/core';
+import { AbstractHttpAdapter, ApplicationConfig } from '@nestjs/core';
 import * as fs from 'fs';
 import { ServeStaticModuleOptions } from '../interfaces/serve-static-options.interface';
 import {
   DEFAULT_FASTIFY_RENDER_PATH,
   DEFAULT_ROOT_PATH
 } from '../serve-static.constants';
+import { validateGlobalPrefix } from '../utils/validate-global-prefix.util';
 import { validatePath } from '../utils/validate-path.util';
 import { AbstractLoader } from './abstract.loader';
 
@@ -14,9 +15,11 @@ import { AbstractLoader } from './abstract.loader';
 export class FastifyLoader extends AbstractLoader {
   public register(
     httpAdapter: AbstractHttpAdapter,
+    config: ApplicationConfig,
     optionsArr: ServeStaticModuleOptions[]
   ) {
     const app = httpAdapter.getInstance();
+    const globalPrefix = config.getGlobalPrefix();
     const fastifyStatic = loadPackage(
       '@fastify/static',
       'ServeStaticModule',
@@ -28,6 +31,14 @@ export class FastifyLoader extends AbstractLoader {
 
       const clientPath = options.rootPath ?? DEFAULT_ROOT_PATH;
       const indexFilePath = this.getIndexFilePath(clientPath);
+
+      if (
+        globalPrefix &&
+        options.useGlobalPrefix &&
+        validateGlobalPrefix(globalPrefix)
+      ) {
+        options.serveRoot = `/${globalPrefix}${options.serveRoot || ''}`;
+      }
 
       const renderFn = (req: any, res: any) => {
         fs.stat(indexFilePath, (err) => {
