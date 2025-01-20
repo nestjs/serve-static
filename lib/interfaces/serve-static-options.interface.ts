@@ -7,7 +7,9 @@ export interface ServeStaticModuleOptions {
    */
   rootPath?: string;
   /**
-   * Path to render static app (concatenated with the `serveRoot` value). Default: * (wildcard - all paths). Note: `RegExp` is not supported by the `@nestjs/platform-fastify`.
+   * Path to render static app (concatenated with the `serveRoot` value).
+   * Default (express): {*any} (wildcard - all paths).
+   * Default (fastify): * (wildcard - all paths).
    */
   renderPath?: string | RegExp;
   /**
@@ -97,6 +99,25 @@ export interface ServeStaticModuleOptions {
      * stat the stat object of the file that is being sent
      */
     setHeaders?: (res: any, path: string, stat: any) => any;
+
+    /**
+     * Only for Fastify.
+     *
+     * When enabled, the server will attempt to send the Brotli encoded asset first,
+     * if supported by the Accept-Encoding headers. If Brotli is not supported,
+     * it will retry with gzip, and finally fall back to the original file.
+     *
+     * You may choose to skip compression for smaller files that do not benefit from it.
+     */
+    preCompressed?: boolean;
+
+    /**
+     * Only for Fastify.
+     *
+     * When false, reply object won't be automatically decorated with the sendFile method.
+     * @default true
+     */
+    decorateReply?: boolean;
   };
 }
 
