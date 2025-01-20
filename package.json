@@ -48,7 +48,7 @@
     "eslint-plugin-import": "2.31.0",
     "express": "4.21.2",
     "fastify": "4.29.0",
-    "@fastify/static": "7.0.4",
+    "@fastify/static": "8.0.4",
     "husky": "9.1.7",
     "lint-staged": "15.4.1",
     "prettier": "3.4.2",
