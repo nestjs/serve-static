@@ -1,6 +1,6 @@
 import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { loadPackage } from '@nestjs/common/utils/load-package.util';
-import { AbstractHttpAdapter } from '@nestjs/core';
+import { AbstractHttpAdapter, ApplicationConfig } from '@nestjs/core';
 import * as fs from 'fs';
 import { ServeStaticModuleOptions } from '../interfaces/serve-static-options.interface';
 import {
@@ -8,6 +8,7 @@ import {
   DEFAULT_ROOT_PATH
 } from '../serve-static.constants';
 import { isRouteExcluded } from '../utils/is-route-excluded.util';
+import { validateGlobalPrefix } from '../utils/validate-global-prefix.util';
 import { validatePath } from '../utils/validate-path.util';
 import { AbstractLoader } from './abstract.loader';
 
@@ -15,9 +16,11 @@ import { AbstractLoader } from './abstract.loader';
 export class ExpressLoader extends AbstractLoader {
   public register(
     httpAdapter: AbstractHttpAdapter,
+    config: ApplicationConfig,
     optionsArr: ServeStaticModuleOptions[]
   ) {
     const app = httpAdapter.getInstance();
+    const globalPrefix = config.getGlobalPrefix();
     const express = loadPackage('express', 'ServeStaticModule', () =>
       require('express')
     );
@@ -42,6 +45,14 @@ export class ExpressLoader extends AbstractLoader {
           next();
         }
       };
+
+      if (
+        globalPrefix &&
+        options.useGlobalPrefix &&
+        validateGlobalPrefix(globalPrefix)
+      ) {
+        options.serveRoot = `/${globalPrefix}${options.serveRoot || ''}`;
+      }
 
       if (options.serveRoot) {
         app.use(
