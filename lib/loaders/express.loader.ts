@@ -21,7 +21,7 @@ export class ExpressLoader extends AbstractLoader {
     const express = loadPackage('express', 'ServeStaticModule', () =>
       require('express')
     );
-    optionsArr.forEach(options => {
+    optionsArr.forEach((options) => {
       options.renderPath = options.renderPath || DEFAULT_RENDER_PATH;
       const clientPath = options.rootPath || DEFAULT_ROOT_PATH;
       const indexFilePath = this.getIndexFilePath(clientPath);
