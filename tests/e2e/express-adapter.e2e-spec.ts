@@ -119,7 +119,18 @@ describe('Express adapter', () => {
         return request(server)
           .get('/404')
           .expect(404)
-          .expect(/Not Found/);
+          .expect(/Not Found/)
+          .expect(/ENOENT/);
+      });
+    });
+
+    describe('when trying to hit a non-existing route under the excluded path', () => {
+      it('should return 404', async () => {
+        return request(server)
+          .get('/api/404')
+          .expect(404)
+          .expect(/Not Found/)
+          .expect(/Cannot GET \/api\/404/);
       });
     });
 

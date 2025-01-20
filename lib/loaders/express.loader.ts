@@ -70,12 +70,19 @@ export class ExpressLoader extends AbstractLoader {
         app.get(options.renderPath, renderFn);
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      app.use((err: any, _req: any, _res: any, _next: Function) => {
+      app.use((err: any, req: any, _res: any, next: Function) => {
+        if (isRouteExcluded(req, options.exclude)) {
+          const method = httpAdapter.getRequestMethod(req);
+          const url = httpAdapter.getRequestUrl(req);
+          return next(new NotFoundException(`Cannot ${method} ${url}`));
+        }
+
         if (err instanceof HttpException) {
           throw err;
-        } else if (err?.message?.includes('ENOENT') || err?.code === 'ENOENT') {
+        } else if (err?.message?.includes('ENOENT')) {
           throw new NotFoundException(err.message);
+        } else if (err?.code === 'ENOENT') {
+          throw new NotFoundException(`ENOENT: ${err.message}`);
         }
       });
     });
