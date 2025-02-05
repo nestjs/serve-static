@@ -9,6 +9,24 @@ describe('Express adapter', () => {
   let server: Server;
   let app: INestApplication;
 
+  describe('when middleware throws generic error', () => {
+    beforeAll(async () => {
+      app = await NestFactory.create(AppModule.withDefaults(), {
+        logger: new NoopLogger()
+      });
+      app.use((_req, _res, next) => next(new Error('Something went wrong')));
+
+      server = app.getHttpServer();
+      await app.init();
+    });
+
+    describe('GET /index.html', () => {
+      it('should return Iternal Server Error', async () => {
+        return request(server).get('/index.html').expect(500);
+      });
+    });
+  });
+
   describe('when "fallthrough" option is set to "true"', () => {
     beforeAll(async () => {
       app = await NestFactory.create(AppModule.withFallthrough(), {
