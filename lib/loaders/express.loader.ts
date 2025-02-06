@@ -83,6 +83,8 @@ export class ExpressLoader extends AbstractLoader {
           throw new NotFoundException(err.message);
         } else if (err?.code === 'ENOENT') {
           throw new NotFoundException(`ENOENT: ${err.message}`);
+        } else {
+          next(err);
         }
       });
     });
