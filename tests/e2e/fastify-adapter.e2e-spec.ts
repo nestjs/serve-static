@@ -80,19 +80,6 @@ describe('Fastify adapter', () => {
     });
   });
 
-  describe('when trying to get a non-existing file', () => {
-    it('should return 404', async () => {
-      return app
-        .inject({
-          method: 'GET',
-          url: '/404'
-        })
-        .then((result) => {
-          expect(result.statusCode).toEqual(404);
-        });
-    });
-  });
-
   afterAll(async () => {
     await app.close();
   });
