@@ -5,6 +5,7 @@ import {
 } from '@nestjs/platform-fastify';
 import { AppModule } from '../src/app.module';
 import { NoopLogger } from '../utils/noop-logger';
+import request from 'supertest';
 
 describe('Fastify adapter', () => {
   let app: NestFastifyApplication;
@@ -82,14 +83,15 @@ describe('Fastify adapter', () => {
     });
 
     describe('when trying to get a non-existing file', () => {
-      it('should return 404', async () => {
+      it('should returns index page', async () => {
         return app
           .inject({
             method: 'GET',
             url: '/404'
           })
           .then((result) => {
-            expect(result.statusCode).toEqual(404);
+            expect(result.statusCode).toEqual(200);
+            expect(result.payload).toContain('Static website');
           });
       });
     });
@@ -172,15 +174,14 @@ describe('Fastify adapter', () => {
     });
 
     describe('when trying to get a non-existing file', () => {
-      it('should returns index page', async () => {
+      it('should return 404', async () => {
         return app
           .inject({
             method: 'GET',
             url: '/404'
           })
           .then((result) => {
-            expect(result.statusCode).toEqual(200);
-            expect(result.payload).toContain('Static website');
+            expect(result.statusCode).toEqual(404);
           });
       });
     });

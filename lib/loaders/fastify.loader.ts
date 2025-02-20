@@ -41,7 +41,7 @@ export class FastifyLoader extends AbstractLoader {
       }
 
       const renderFn = (req: any, res: any) => {
-        if (options.serveStaticOptions?.fallthrough) {
+        if (!options.serveStaticOptions?.fallthrough) {
           const error = new NotFoundException();
           res.status(error.getStatus()).send(error.getResponse());
           return;
