@@ -41,20 +41,25 @@ export class FastifyLoader extends AbstractLoader {
       }
 
       const renderFn = (req: any, res: any) => {
-        fs.stat(indexFilePath, (err) => {
+        if (options.serveStaticOptions?.fallthrough) {
+          const error = new NotFoundException();
+          res.status(error.getStatus()).send(error.getResponse());
+          return;
+        }
+
+        fs.stat(indexFilePath, (err, stat) => {
           if (err) {
             const error = new NotFoundException();
             res.status(error.getStatus()).send(error.getResponse());
             return;
           }
-          
+
           const stream = fs.createReadStream(indexFilePath);
-          
+
           if (options.serveStaticOptions?.setHeaders) {
-            const stat = fs.statSync(indexFilePath);
             options.serveStaticOptions.setHeaders(res, indexFilePath, stat);
           }
-          
+
           res.type('text/html').send(stream);
         });
       };
