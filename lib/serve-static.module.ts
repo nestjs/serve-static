@@ -15,6 +15,9 @@ import { AbstractLoader } from './loaders/abstract.loader';
 import { SERVE_STATIC_MODULE_OPTIONS } from './serve-static.constants';
 import { serveStaticProviders } from './serve-static.providers';
 
+/**
+ * @publicApi
+ */
 @Module({
   providers: [...serveStaticProviders]
 })
