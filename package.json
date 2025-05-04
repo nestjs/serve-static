@@ -52,7 +52,7 @@
     "@types/supertest": "6.0.3",
     "eslint": "9.26.0",
     "eslint-config-prettier": "10.1.2",
-    "eslint-plugin-prettier": "5.2.6",
+    "eslint-plugin-prettier": "5.3.1",
     "express": "5.1.0",
     "fastify": "5.3.0",
     "globals": "16.0.0",
