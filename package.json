@@ -51,7 +51,7 @@
     "@types/node": "22.16.4",
     "@types/supertest": "6.0.3",
     "eslint": "9.31.0",
-    "eslint-config-prettier": "10.1.5",
+    "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.1",
     "express": "5.1.0",
     "fastify": "5.3.0",
