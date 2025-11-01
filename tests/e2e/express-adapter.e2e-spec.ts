@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, PayloadTooLargeException } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { Server } from 'net';
 import request from 'supertest';
@@ -150,6 +150,34 @@ describe('Express adapter', () => {
           .expect(/Not Found/)
           .expect(/Cannot GET \/api\/404/);
       });
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
+
+  describe('when error happens in the previous middleware', () => {
+    beforeAll(async () => {
+      app = await NestFactory.create(AppModule.withDefaults(), {
+        logger: new NoopLogger()
+      });
+
+      app.use((_req, _res, next) => {
+        next(new PayloadTooLargeException());
+      });
+
+      app.setGlobalPrefix('api');
+
+      server = app.getHttpServer();
+      await app.init();
+    });
+
+    it('should return 413', async () => {
+      return request(server)
+        .get('/api')
+        .expect(413)
+        .expect(/Payload Too Large/);
     });
 
     afterAll(async () => {
