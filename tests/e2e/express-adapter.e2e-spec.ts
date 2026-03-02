@@ -147,8 +147,7 @@ describe('Express adapter', () => {
         return request(server)
           .get('/api/404')
           .expect(404)
-          .expect(/Not Found/)
-          .expect(/Cannot GET \/api\/404/);
+          .expect({ statusCode: 404, message: 'Not Found' }); // Default NestJS NotFoundException response
       });
     });
 
