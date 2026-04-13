@@ -8,10 +8,12 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "esModuleInterop": true,
-    "target": "ES2021",
+    "target": "ES2022",
     "sourceMap": false,
     "outDir": "./dist",
-    "skipLibCheck": true
+    "rootDir": "./lib",
+    "skipLibCheck": true,
+    "types": ["node"]
   },
   "include": ["lib/**/*", "../index.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"]

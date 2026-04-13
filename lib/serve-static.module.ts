@@ -65,8 +65,8 @@ export class ServeStaticModule implements OnModuleInit {
     return [
       this.createAsyncOptionsProvider(options),
       {
-        provide: options.useClass,
-        useClass: options.useClass
+        provide: options.useClass!,
+        useClass: options.useClass!
       }
     ];
   }
@@ -85,7 +85,7 @@ export class ServeStaticModule implements OnModuleInit {
       provide: SERVE_STATIC_MODULE_OPTIONS,
       useFactory: async (optionsFactory: ServeStaticModuleOptionsFactory) =>
         optionsFactory.createLoggerOptions(),
-      inject: [options.useExisting || options.useClass]
+      inject: [options.useExisting ?? options.useClass!]
     };
   }
 
