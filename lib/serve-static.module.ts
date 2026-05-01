@@ -10,10 +10,10 @@ import {
   ServeStaticModuleAsyncOptions,
   ServeStaticModuleOptions,
   ServeStaticModuleOptionsFactory
-} from './interfaces/serve-static-options.interface';
-import { AbstractLoader } from './loaders/abstract.loader';
-import { SERVE_STATIC_MODULE_OPTIONS } from './serve-static.constants';
-import { serveStaticProviders } from './serve-static.providers';
+} from './interfaces/serve-static-options.interface.js';
+import { AbstractLoader } from './loaders/abstract.loader.js';
+import { SERVE_STATIC_MODULE_OPTIONS } from './serve-static.constants.js';
+import { serveStaticProviders } from './serve-static.providers.js';
 
 /**
  * @publicApi
