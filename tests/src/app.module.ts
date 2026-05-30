@@ -48,4 +48,16 @@ export class AppModule {
       ]
     };
   }
+
+  static withRegexExclude() {
+    return {
+      module: AppModule,
+      imports: [
+        ServeStaticModule.forRoot({
+          rootPath: join(__dirname, '..', 'client'),
+          exclude: /^\/api(\/.*)?$/
+        })
+      ]
+    };
+  }
 }
