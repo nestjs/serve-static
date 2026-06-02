@@ -102,7 +102,8 @@ export interface ServeStaticModuleOptions {
     maxAge?: number | string;
 
     /**
-     * Redirect to trailing "/" when the pathname is a dir. Defaults to true.
+     * Redirect to trailing "/" when the pathname is a dir.
+     * Defaults to true when using Express and false when using Fastify.
      */
     redirect?: boolean;
 
@@ -148,8 +149,10 @@ export interface ServeStaticModuleOptionsFactory {
 /**
  * @publicApi
  */
-export interface ServeStaticModuleAsyncOptions
-  extends Pick<ModuleMetadata, 'imports'> {
+export interface ServeStaticModuleAsyncOptions extends Pick<
+  ModuleMetadata,
+  'imports'
+> {
   isGlobal?: boolean;
   useExisting?: Type<ServeStaticModuleOptionsFactory>;
   useClass?: Type<ServeStaticModuleOptionsFactory>;
