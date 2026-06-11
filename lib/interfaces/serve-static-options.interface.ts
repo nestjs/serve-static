@@ -27,8 +27,9 @@ export interface ServeStaticModuleOptions {
   serveRoot?: string;
   /**
    * Paths to exclude when serving the static app. WARNING! Not supported by `fastify`. If you use `fastify`, you can exclude routes using regexp (set the `renderPath` to a regular expression) instead.
+   * Supports either an array of string paths or a regular expression.
    */
-  exclude?: string[];
+  exclude?: string[] | RegExp;
   /**
    * Serve static options (static files)
    * Passed down to the underlying either `express.static` or `fastify-static.send`
@@ -148,8 +149,10 @@ export interface ServeStaticModuleOptionsFactory {
 /**
  * @publicApi
  */
-export interface ServeStaticModuleAsyncOptions
-  extends Pick<ModuleMetadata, 'imports'> {
+export interface ServeStaticModuleAsyncOptions extends Pick<
+  ModuleMetadata,
+  'imports'
+> {
   isGlobal?: boolean;
   useExisting?: Type<ServeStaticModuleOptionsFactory>;
   useClass?: Type<ServeStaticModuleOptionsFactory>;
