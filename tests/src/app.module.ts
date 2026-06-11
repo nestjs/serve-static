@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { join } from 'path';
-import { ServeStaticModule } from '../../lib';
-import { AppController } from './app.controller';
+import { ServeStaticModule } from '../../lib/index.js';
+import { AppController } from './app.controller.js';
 
 @Module({
   controllers: [AppController]

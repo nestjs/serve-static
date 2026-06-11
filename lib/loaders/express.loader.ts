@@ -1,16 +1,16 @@
 import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
-import { loadPackage } from '@nestjs/common/utils/load-package.util';
+import { loadPackage } from '@nestjs/common/utils/load-package.util.js';
 import { AbstractHttpAdapter, ApplicationConfig } from '@nestjs/core';
 import * as fs from 'fs';
-import { ServeStaticModuleOptions } from '../interfaces/serve-static-options.interface';
+import { ServeStaticModuleOptions } from '../interfaces/serve-static-options.interface.js';
 import {
   DEFAULT_EXPRESS_RENDER_PATH,
   DEFAULT_ROOT_PATH
-} from '../serve-static.constants';
-import { isRouteExcluded } from '../utils/is-route-excluded.util';
-import { validateGlobalPrefix } from '../utils/validate-global-prefix.util';
-import { validatePath } from '../utils/validate-path.util';
-import { AbstractLoader } from './abstract.loader';
+} from '../serve-static.constants.js';
+import { isRouteExcluded } from '../utils/is-route-excluded.util.js';
+import { validateGlobalPrefix } from '../utils/validate-global-prefix.util.js';
+import { validatePath } from '../utils/validate-path.util.js';
+import { AbstractLoader } from './abstract.loader.js';
 
 @Injectable()
 export class ExpressLoader extends AbstractLoader {
