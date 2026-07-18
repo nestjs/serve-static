@@ -36,10 +36,19 @@ export class ExpressLoader extends AbstractLoader {
             options.serveStaticOptions.setHeaders(res, indexFilePath, stat);
           }
           res.sendFile(indexFilePath, null, (err: Error) => {
-            if (err) {
-              const error = new NotFoundException(err.message);
-              res.status(error.getStatus()).send(error.getResponse());
+            if (!err) {
+              return;
             }
+            // This callback also fires when the client aborts mid-stream, by
+            // which point the headers are already on the wire. Responding then
+            // throws ERR_HTTP_HEADERS_SENT from inside sendFile's own callback,
+            // outside the middleware chain and any exception filter, so it
+            // takes down the process instead of failing the one request.
+            if (res.headersSent) {
+              return;
+            }
+            const error = new NotFoundException(err.message);
+            res.status(error.getStatus()).send(error.getResponse());
           });
         } else {
           next();
