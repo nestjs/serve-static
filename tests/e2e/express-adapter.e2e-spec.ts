@@ -87,6 +87,39 @@ describe('Express adapter', () => {
     });
   });
 
+  describe('when exclude is a RegExp', () => {
+    beforeAll(async () => {
+      app = await NestFactory.create(AppModule.withRegexExclude(), {
+        logger: new NoopLogger()
+      });
+
+      server = app.getHttpServer();
+      await app.init();
+    });
+
+    describe('GET /api', () => {
+      it('should return 404 for excluded route', async () => {
+        return request(server)
+          .get('/api')
+          .expect(404)
+          .expect(/Not Found/);
+      });
+    });
+
+    describe('GET /', () => {
+      it('should return HTML file', async () => {
+        return request(server)
+          .get('/')
+          .expect(200)
+          .expect('Content-Type', /html/);
+      });
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
+
   describe('when "fallthrough" option is set to "false"', () => {
     beforeAll(async () => {
       app = await NestFactory.create(AppModule.withoutFallthrough(), {
