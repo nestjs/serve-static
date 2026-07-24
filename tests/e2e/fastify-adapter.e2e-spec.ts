@@ -3,8 +3,8 @@ import {
   FastifyAdapter,
   NestFastifyApplication
 } from '@nestjs/platform-fastify';
-import { AppModule } from '../src/app.module';
-import { NoopLogger } from '../utils/noop-logger';
+import { AppModule } from '../src/app.module.js';
+import { NoopLogger } from '../utils/noop-logger.js';
 import request from 'supertest';
 
 describe('Fastify adapter', () => {

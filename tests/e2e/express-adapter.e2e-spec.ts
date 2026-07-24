@@ -2,8 +2,8 @@ import { INestApplication } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { Server } from 'net';
 import request from 'supertest';
-import { AppModule } from '../src/app.module';
-import { NoopLogger } from '../utils/noop-logger';
+import { AppModule } from '../src/app.module.js';
+import { NoopLogger } from '../utils/noop-logger.js';
 
 describe('Express adapter', () => {
   let server: Server;
