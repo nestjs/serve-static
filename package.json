@@ -19,7 +19,7 @@
     "prepare": "husky"
   },
   "peerDependencies": {
-    "@fastify/static": "^8.0.4 || ^9.0.0",
+    "@fastify/static": "^8.0.4 || ^9.0.0 || ^10.0.0",
     "@nestjs/common": "^11.0.2",
     "@nestjs/core": "^11.0.2",
     "express": "^5.0.1",
@@ -39,7 +39,7 @@
   "devDependencies": {
     "@commitlint/cli": "21.2.1",
     "@commitlint/config-angular": "21.2.0",
-    "@fastify/static": "9.3.0",
+    "@fastify/static": "10.1.2",
     "@nestjs/common": "11.1.28",
     "@nestjs/core": "11.1.28",
     "@nestjs/platform-express": "11.1.28",
