@@ -1,9 +1,9 @@
 import { Provider } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
-import { AbstractLoader } from './loaders/abstract.loader';
-import { ExpressLoader } from './loaders/express.loader';
-import { FastifyLoader } from './loaders/fastify.loader';
-import { NoopLoader } from './loaders/noop.loader';
+import { AbstractLoader } from './loaders/abstract.loader.js';
+import { ExpressLoader } from './loaders/express.loader.js';
+import { FastifyLoader } from './loaders/fastify.loader.js';
+import { NoopLoader } from './loaders/noop.loader.js';
 
 export const serveStaticProviders: Provider[] = [
   {
