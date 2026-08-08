@@ -27,6 +27,58 @@ describe('Express adapter', () => {
     });
   });
 
+  describe('when the client aborts while the index file is streaming', () => {
+    let callbackError: Error | undefined;
+
+    beforeAll(async () => {
+      app = await NestFactory.create(AppModule.withDefaults(), {
+        logger: new NoopLogger()
+      });
+
+      // `sendFile` reports a client abort through its error callback, but by
+      // then the response is already on the wire. Standing in for the abort
+      // keeps the test deterministic: a real mid-stream disconnect is a race.
+      //
+      // In production the callback runs inside a `setImmediate`, so anything it
+      // throws escapes the middleware chain and takes down the process. Here it
+      // is captured so the test can assert nothing was thrown at all.
+      app.use((_req: any, res: any, next: Function) => {
+        res.sendFile = (
+          _path: string,
+          _options: unknown,
+          callback: Function
+        ) => {
+          res.writeHead(200, { 'Content-Type': 'text/html' });
+          res.write('<!doctype html>');
+          try {
+            callback(new Error('Request aborted'));
+          } catch (error) {
+            callbackError = error as Error;
+          }
+          res.end();
+        };
+        next();
+      });
+
+      server = app.getHttpServer();
+      await app.init();
+    });
+
+    // An unknown path is what reaches the SPA fallback; "/" is served straight
+    // from disk by express.static and never calls sendFile.
+    describe('GET /some/spa/route', () => {
+      it('should not try to respond again once the headers are sent', async () => {
+        await request(server).get('/some/spa/route').expect(200);
+
+        expect(callbackError).toBeUndefined();
+      });
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
+
   describe('when "fallthrough" option is set to "true"', () => {
     beforeAll(async () => {
       app = await NestFactory.create(AppModule.withFallthrough(), {
