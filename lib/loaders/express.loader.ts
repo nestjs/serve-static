@@ -71,14 +71,14 @@ export class ExpressLoader extends AbstractLoader {
       }
 
       app.use((err: any, req: any, _res: any, next: Function) => {
+        if (err instanceof HttpException) {
+          throw err;
+        }
+
         if (isRouteExcluded(req, options.exclude)) {
           const method = httpAdapter.getRequestMethod(req);
           const url = httpAdapter.getRequestUrl(req);
           return next(new NotFoundException(`Cannot ${method} ${url}`));
-        }
-
-        if (err instanceof HttpException) {
-          throw err;
         } else if (err?.message?.includes('ENOENT')) {
           throw new NotFoundException(err.message);
         } else if (err?.code === 'ENOENT') {
