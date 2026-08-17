@@ -27,55 +27,97 @@ describe('Express adapter', () => {
     });
   });
 
-  describe('when the client aborts while the index file is streaming', () => {
+  describe('when sendFile fails after the response has started', () => {
     let callbackError: Error | undefined;
+    let sendFileCalled: boolean;
+    let destroyed: boolean;
 
-    beforeAll(async () => {
+    // `sendFile` reports failures through its error callback, but by then the
+    // response is already on the wire. Standing in for that keeps the test
+    // deterministic: a real mid-stream disconnect is a race.
+    //
+    // In production the callback runs inside a `setImmediate`, so anything it
+    // throws escapes the middleware chain and takes down the process. Here it
+    // is captured so the test can assert nothing was thrown at all.
+    const createApp = async (failure: Error) => {
+      callbackError = undefined;
+      sendFileCalled = false;
+      destroyed = false;
+
       app = await NestFactory.create(AppModule.withDefaults(), {
         logger: new NoopLogger()
       });
 
-      // `sendFile` reports a client abort through its error callback, but by
-      // then the response is already on the wire. Standing in for the abort
-      // keeps the test deterministic: a real mid-stream disconnect is a race.
-      //
-      // In production the callback runs inside a `setImmediate`, so anything it
-      // throws escapes the middleware chain and takes down the process. Here it
-      // is captured so the test can assert nothing was thrown at all.
       app.use((_req: any, res: any, next: Function) => {
         res.sendFile = (
           _path: string,
           _options: unknown,
           callback: Function
         ) => {
+          sendFileCalled = true;
           res.writeHead(200, { 'Content-Type': 'text/html' });
           res.write('<!doctype html>');
+
+          const realDestroy = res.destroy.bind(res);
+          res.destroy = (...args: unknown[]) => {
+            destroyed = true;
+            return realDestroy(...args);
+          };
+
           try {
-            callback(new Error('Request aborted'));
+            callback(failure);
           } catch (error) {
             callbackError = error as Error;
           }
-          res.end();
+          if (!destroyed && !res.writableEnded) {
+            res.end();
+          }
         };
         next();
       });
 
       server = app.getHttpServer();
       await app.init();
+    };
+
+    afterEach(async () => {
+      await app.close();
     });
 
     // An unknown path is what reaches the SPA fallback; "/" is served straight
-    // from disk by express.static and never calls sendFile.
+    // from disk by express.static and never calls sendFile. Both cases assert
+    // `sendFileCalled` so they fail loudly rather than passing vacuously if the
+    // request ever stops reaching the fallback.
     describe('GET /some/spa/route', () => {
       it('should not try to respond again once the headers are sent', async () => {
-        await request(server).get('/some/spa/route').expect(200);
+        await createApp(
+          Object.assign(new Error('Request aborted'), { code: 'ECONNABORTED' })
+        );
 
+        await request(server)
+          .get('/some/spa/route')
+          .catch(() => undefined);
+
+        expect(sendFileCalled).toBe(true);
         expect(callbackError).toBeUndefined();
       });
-    });
 
-    afterAll(async () => {
-      await app.close();
+      it('should tear the connection down when the file fails mid-stream', async () => {
+        // Not an abort: the socket is alive, but `send` has already committed a
+        // Content-Length the truncated body cannot satisfy, so the client hangs
+        // unless the response is destroyed.
+        await createApp(
+          Object.assign(new Error('EIO: read failed'), { code: 'EIO' })
+        );
+
+        await request(server)
+          .get('/some/spa/route')
+          .catch(() => undefined);
+
+        expect(sendFileCalled).toBe(true);
+        expect(callbackError).toBeUndefined();
+        expect(destroyed).toBe(true);
+      });
     });
   });
 
