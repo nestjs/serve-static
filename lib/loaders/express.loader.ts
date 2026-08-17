@@ -2,6 +2,7 @@ import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { loadPackage } from '@nestjs/common/utils/load-package.util.js';
 import { AbstractHttpAdapter, ApplicationConfig } from '@nestjs/core';
 import * as fs from 'fs';
+import { createRequire } from 'module';
 import { ServeStaticModuleOptions } from '../interfaces/serve-static-options.interface.js';
 import {
   DEFAULT_EXPRESS_RENDER_PATH,
@@ -11,6 +12,8 @@ import { isRouteExcluded } from '../utils/is-route-excluded.util.js';
 import { validateGlobalPrefix } from '../utils/validate-global-prefix.util.js';
 import { validatePath } from '../utils/validate-path.util.js';
 import { AbstractLoader } from './abstract.loader.js';
+
+const require = createRequire(import.meta.url);
 
 @Injectable()
 export class ExpressLoader extends AbstractLoader {

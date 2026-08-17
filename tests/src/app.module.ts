@@ -12,7 +12,7 @@ export class AppModule {
       module: AppModule,
       imports: [
         ServeStaticModule.forRoot({
-          rootPath: join(__dirname, '..', 'client'),
+          rootPath: join(import.meta.dirname, '..', 'client'),
           exclude: ['/api/{*any}']
         })
       ]
@@ -24,7 +24,7 @@ export class AppModule {
       module: AppModule,
       imports: [
         ServeStaticModule.forRoot({
-          rootPath: join(__dirname, '..', 'client'),
+          rootPath: join(import.meta.dirname, '..', 'client'),
           exclude: ['/api/{*any}'],
           serveStaticOptions: {
             fallthrough: true
@@ -39,7 +39,7 @@ export class AppModule {
       module: AppModule,
       imports: [
         ServeStaticModule.forRoot({
-          rootPath: join(__dirname, '..', 'client'),
+          rootPath: join(import.meta.dirname, '..', 'client'),
           exclude: ['/api/{*any}'],
           serveStaticOptions: {
             fallthrough: false

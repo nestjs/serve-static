@@ -10,8 +10,11 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "default": "./dist/index.js"
     }
+  },
+  "engines": {
+    "node": "^20.19.0 || ^22.12.0 || >=23.0.0"
   },
   "scripts": {
     "build": "npm run build:lib",

@@ -31,6 +31,10 @@
 $ npm i --save @nestjs/serve-static
 ```
 
+This package ships as ES modules only and requires Node.js `^20.19.0 || ^22.12.0 || >=23.0.0`.
+
+CommonJS applications can still consume it through Node's `require(esm)` support. TypeScript projects that compile to CommonJS need `"module": "nodenext"` in their `tsconfig.json`; the older `"node16"` setting predates `require(esm)` and reports `TS1479`.
+
 ## Example
 
 See full example [here](https://github.com/nestjs/nest/tree/master/sample/24-serve-static).
@@ -47,7 +51,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'client')
+      rootPath: join(import.meta.dirname, '..', 'client')
     })
   ]
 })

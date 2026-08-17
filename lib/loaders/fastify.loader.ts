@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { loadPackage } from '@nestjs/common/utils/load-package.util.js';
 import { AbstractHttpAdapter, ApplicationConfig } from '@nestjs/core';
 import * as fs from 'fs';
+import { createRequire } from 'module';
 import { ServeStaticModuleOptions } from '../interfaces/serve-static-options.interface.js';
 import {
   DEFAULT_FASTIFY_RENDER_PATH,
@@ -10,6 +11,8 @@ import {
 import { validateGlobalPrefix } from '../utils/validate-global-prefix.util.js';
 import { validatePath } from '../utils/validate-path.util.js';
 import { AbstractLoader } from './abstract.loader.js';
+
+const require = createRequire(import.meta.url);
 
 @Injectable()
 export class FastifyLoader extends AbstractLoader {
