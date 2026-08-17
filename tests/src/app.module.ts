@@ -54,8 +54,22 @@ export class AppModule {
       module: AppModule,
       imports: [
         ServeStaticModule.forRoot({
-          rootPath: join(__dirname, '..', 'client'),
+          rootPath: join(import.meta.dirname, '..', 'client'),
           exclude: /^\/api(\/.*)?$/
+        })
+      ]
+    };
+  }
+
+  // A global pattern is stateful under `RegExp.prototype.test`, so this fixture
+  // guards against the exclusion alternating between requests.
+  static withGlobalRegexExclude() {
+    return {
+      module: AppModule,
+      imports: [
+        ServeStaticModule.forRoot({
+          rootPath: join(import.meta.dirname, '..', 'client'),
+          exclude: /^\/api(\/.*)?$/g
         })
       ]
     };

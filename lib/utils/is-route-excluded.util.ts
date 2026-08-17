@@ -8,7 +8,12 @@ export const isRouteExcluded = (req: any, paths: string[] | RegExp = []) => {
       : req.originalUrl;
 
   if (paths instanceof RegExp) {
-    return paths.test(pathname);
+    // The caller owns this RegExp and the same instance is reused for every
+    // request, so `test` must not be used here: on a global or sticky pattern
+    // it advances `lastIndex`, which would make consecutive requests for the
+    // same path alternate between excluded and not. `search` always matches
+    // from the start and leaves `lastIndex` untouched.
+    return pathname.search(paths) !== -1;
   }
 
   return paths.some((path) => {
