@@ -1,4 +1,9 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  Logger,
+  NotFoundException
+} from '@nestjs/common';
 import { loadPackage } from '@nestjs/common/utils/load-package.util.js';
 import { AbstractHttpAdapter, ApplicationConfig } from '@nestjs/core';
 import * as fs from 'fs';
@@ -17,6 +22,8 @@ const require = createRequire(import.meta.url);
 
 @Injectable()
 export class ExpressLoader extends AbstractLoader {
+  private readonly logger = new Logger(ExpressLoader.name);
+
   public register(
     httpAdapter: AbstractHttpAdapter,
     config: ApplicationConfig,
@@ -39,10 +46,31 @@ export class ExpressLoader extends AbstractLoader {
             options.serveStaticOptions.setHeaders(res, indexFilePath, stat);
           }
           res.sendFile(indexFilePath, null, (err: Error) => {
-            if (err) {
-              const error = new NotFoundException(err.message);
-              res.status(error.getStatus()).send(error.getResponse());
+            if (!err) {
+              return;
             }
+            // This callback also fires once the response is already on the
+            // wire. Responding then throws ERR_HTTP_HEADERS_SENT from inside
+            // sendFile's own callback, outside the middleware chain and any
+            // exception filter, so it takes down the process instead of
+            // failing the one request.
+            if (res.headersSent) {
+              // A client abort is routine and the socket is already gone. A
+              // read error mid-transfer is not: `send` has committed a
+              // Content-Length the truncated body can no longer satisfy, so
+              // ending the response leaves the client waiting for bytes that
+              // will never arrive. Tearing the connection down is the only way
+              // to release it.
+              if ((err as NodeJS.ErrnoException).code !== 'ECONNABORTED') {
+                this.logger.error(
+                  `Failed to send "${indexFilePath}" after the response had started: ${err.message}`
+                );
+              }
+              res.destroy();
+              return;
+            }
+            const error = new NotFoundException(err.message);
+            res.status(error.getStatus()).send(error.getResponse());
           });
         } else {
           next();
