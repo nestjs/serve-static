@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "declaration": true,
     "noImplicitAny": false,
     "removeComments": true,
@@ -15,6 +16,6 @@
     "skipLibCheck": true,
     "types": ["node"]
   },
-  "include": ["lib/**/*", "../index.ts"],
+  "include": ["lib/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

@@ -1,5 +1,4 @@
-import { Provider, Type } from '@nestjs/common';
-import { ModuleMetadata } from '@nestjs/common/interfaces';
+import { ModuleMetadata, Provider, Type } from '@nestjs/common';
 
 /**
  * @publicApi
@@ -148,8 +147,10 @@ export interface ServeStaticModuleOptionsFactory {
 /**
  * @publicApi
  */
-export interface ServeStaticModuleAsyncOptions
-  extends Pick<ModuleMetadata, 'imports'> {
+export interface ServeStaticModuleAsyncOptions extends Pick<
+  ModuleMetadata,
+  'imports'
+> {
   isGlobal?: boolean;
   useExisting?: Type<ServeStaticModuleOptionsFactory>;
   useClass?: Type<ServeStaticModuleOptionsFactory>;
