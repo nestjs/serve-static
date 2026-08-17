@@ -5,5 +5,10 @@ export default defineConfig({
     root: './tests',
     include: ['**/*-spec.ts'],
     globals: true
+  },
+  oxc: {
+    decorator: {
+      legacy: true
+    }
   }
 });
