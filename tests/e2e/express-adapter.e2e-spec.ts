@@ -181,6 +181,69 @@ describe('Express adapter', () => {
     });
   });
 
+  describe('when exclude is a RegExp', () => {
+    beforeAll(async () => {
+      app = await NestFactory.create(AppModule.withRegexExclude(), {
+        logger: new NoopLogger()
+      });
+
+      server = app.getHttpServer();
+      await app.init();
+    });
+
+    describe('GET /api', () => {
+      it('should return 404 for excluded route', async () => {
+        return request(server)
+          .get('/api')
+          .expect(404)
+          .expect(/Not Found/);
+      });
+    });
+
+    describe('GET /', () => {
+      it('should return HTML file', async () => {
+        return request(server)
+          .get('/')
+          .expect(200)
+          .expect('Content-Type', /html/);
+      });
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
+
+  describe('when exclude is a RegExp carrying the global flag', () => {
+    beforeAll(async () => {
+      app = await NestFactory.create(AppModule.withGlobalRegexExclude(), {
+        logger: new NoopLogger()
+      });
+
+      server = app.getHttpServer();
+      await app.init();
+    });
+
+    // `RegExp.prototype.test` advances `lastIndex` on a global pattern, and the
+    // same instance is reused for every request, so matching with it would make
+    // this alternate 404, 200, 404, 200 rather than excluding consistently.
+    describe('GET /api repeatedly', () => {
+      it('should stay excluded across consecutive requests', async () => {
+        const statuses: number[] = [];
+        for (let i = 0; i < 4; i++) {
+          const response = await request(server).get('/api');
+          statuses.push(response.status);
+        }
+
+        expect(statuses).toEqual([404, 404, 404, 404]);
+      });
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
+
   describe('when "fallthrough" option is set to "false"', () => {
     beforeAll(async () => {
       app = await NestFactory.create(AppModule.withoutFallthrough(), {
