@@ -1,4 +1,8 @@
-import { INestApplication } from '@nestjs/common';
+import {
+  ConflictException,
+  INestApplication,
+  PayloadTooLargeException
+} from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { Server } from 'net';
 import request from 'supertest';
@@ -307,6 +311,120 @@ describe('Express adapter', () => {
           .expect(/Not Found/)
           .expect(/Cannot GET \/api\/404/);
       });
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
+
+  describe('when error happens in the previous middleware', () => {
+    beforeAll(async () => {
+      app = await NestFactory.create(AppModule.withDefaults(), {
+        logger: new NoopLogger()
+      });
+
+      app.use((_req, _res, next) => {
+        next(new PayloadTooLargeException());
+      });
+
+      app.setGlobalPrefix('api');
+
+      server = app.getHttpServer();
+      await app.init();
+    });
+
+    it('should return 413', async () => {
+      return request(server)
+        .get('/api')
+        .expect(413)
+        .expect(/Payload Too Large/);
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
+
+  describe('when a non-http error happens in the previous middleware', () => {
+    beforeAll(async () => {
+      app = await NestFactory.create(AppModule.withDefaults(), {
+        logger: new NoopLogger()
+      });
+
+      app.use((_req, _res, next) => {
+        next(new TypeError('genuine server fault'));
+      });
+
+      app.setGlobalPrefix('api');
+
+      server = app.getHttpServer();
+      await app.init();
+    });
+
+    // An excluded route must not turn a genuine fault into a 404: that reports
+    // a server error as a client one, so it never trips 5xx alerting.
+    it('should return 500 on an excluded route', async () => {
+      return request(server).get('/api').expect(500);
+    });
+
+    it('should return 500 on a non-excluded route', async () => {
+      return request(server).get('/some/spa/route').expect(500);
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
+
+  describe('when the previous middleware error mentions ENOENT', () => {
+    beforeAll(async () => {
+      app = await NestFactory.create(AppModule.withDefaults(), {
+        logger: new NoopLogger()
+      });
+
+      app.use((_req, _res, next) => {
+        next(new ConflictException('ENOENT: upstream said so'));
+      });
+
+      app.setGlobalPrefix('api');
+
+      server = app.getHttpServer();
+      await app.init();
+    });
+
+    // The static-file handling keys off ENOENT, so an application exception
+    // that merely mentions it must still keep its own status rather than being
+    // rewritten as a 404.
+    it('should keep the original status on an excluded route', async () => {
+      return request(server).get('/api').expect(409);
+    });
+
+    it('should keep the original status on a non-excluded route', async () => {
+      return request(server).get('/some/spa/route').expect(409);
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
+
+  describe('when an excluded route misses a static file', () => {
+    beforeAll(async () => {
+      app = await NestFactory.create(AppModule.withDefaults(), {
+        logger: new NoopLogger()
+      });
+      app.setGlobalPrefix('api');
+
+      server = app.getHttpServer();
+      await app.init();
+    });
+
+    it('should report a plain 404 without leaking the filesystem path', async () => {
+      const response = await request(server).get('/api/404').expect(404);
+
+      expect(response.body.message).toBe('Cannot GET /api/404');
+      expect(JSON.stringify(response.body)).not.toMatch(/ENOENT|client/);
     });
 
     afterAll(async () => {

@@ -102,21 +102,33 @@ export class ExpressLoader extends AbstractLoader {
       }
 
       app.use((err: any, req: any, _res: any, next: Function) => {
+        // Anything the application raised is already a deliberate response.
+        if (err instanceof HttpException) {
+          throw err;
+        }
+
+        const isMissingFile =
+          err?.code === 'ENOENT' || err?.message?.includes('ENOENT');
+
+        // Only a missing file is this middleware's business. Rewriting any
+        // other failure as a 404 would report a genuine server fault as a
+        // client error, so it never reaches an exception filter or 5xx alert.
+        if (!isMissingFile) {
+          return next(err);
+        }
+
         if (isRouteExcluded(req, options.exclude)) {
           const method = httpAdapter.getRequestMethod(req);
           const url = httpAdapter.getRequestUrl(req);
+          // Excluded routes report a plain miss instead of the underlying
+          // ENOENT, which would echo the resolved filesystem path back.
           return next(new NotFoundException(`Cannot ${method} ${url}`));
         }
 
-        if (err instanceof HttpException) {
-          throw err;
-        } else if (err?.message?.includes('ENOENT')) {
+        if (err.message?.includes('ENOENT')) {
           throw new NotFoundException(err.message);
-        } else if (err?.code === 'ENOENT') {
-          throw new NotFoundException(`ENOENT: ${err.message}`);
-        } else {
-          next(err);
         }
+        throw new NotFoundException(`ENOENT: ${err.message}`);
       });
     });
   }
