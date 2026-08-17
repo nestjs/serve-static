@@ -8,7 +8,8 @@ export default defineConfig({
   },
   oxc: {
     decorator: {
-      legacy: true
+      legacy: true,
+      emitDecoratorMetadata: true
     }
   }
 });
