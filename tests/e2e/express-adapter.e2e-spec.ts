@@ -299,7 +299,7 @@ describe('Express adapter', () => {
           .get('/404')
           .expect(404)
           .expect(/Not Found/)
-          .expect(/ENOENT/);
+          .expect(/Cannot GET \/404/);
       });
     });
 
