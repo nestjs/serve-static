@@ -69,7 +69,11 @@ export class ExpressLoader extends AbstractLoader {
               res.destroy();
               return;
             }
-            const error = new NotFoundException(err.message);
+            // Report a plain miss rather than the underlying ENOENT, whose
+            // message echoes the resolved filesystem path back to the client.
+            const method = httpAdapter.getRequestMethod(req);
+            const url = httpAdapter.getRequestUrl(req);
+            const error = new NotFoundException(`Cannot ${method} ${url}`);
             res.status(error.getStatus()).send(error.getResponse());
           });
         } else {
