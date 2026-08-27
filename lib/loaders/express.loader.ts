@@ -69,7 +69,11 @@ export class ExpressLoader extends AbstractLoader {
               res.destroy();
               return;
             }
-            const error = new NotFoundException(err.message);
+            // Report a plain miss rather than the underlying ENOENT, whose
+            // message echoes the resolved filesystem path back to the client.
+            const method = httpAdapter.getRequestMethod(req);
+            const url = httpAdapter.getRequestUrl(req);
+            const error = new NotFoundException(`Cannot ${method} ${url}`);
             res.status(error.getStatus()).send(error.getResponse());
           });
         } else {
@@ -117,18 +121,11 @@ export class ExpressLoader extends AbstractLoader {
           return next(err);
         }
 
-        if (isRouteExcluded(req, options.exclude)) {
-          const method = httpAdapter.getRequestMethod(req);
-          const url = httpAdapter.getRequestUrl(req);
-          // Excluded routes report a plain miss instead of the underlying
-          // ENOENT, which would echo the resolved filesystem path back.
-          return next(new NotFoundException(`Cannot ${method} ${url}`));
-        }
-
-        if (err.message?.includes('ENOENT')) {
-          throw new NotFoundException(err.message);
-        }
-        throw new NotFoundException(`ENOENT: ${err.message}`);
+        // Report a plain miss rather than the underlying ENOENT, whose
+        // message echoes the resolved filesystem path back to the client.
+        const method = httpAdapter.getRequestMethod(req);
+        const url = httpAdapter.getRequestUrl(req);
+        return next(new NotFoundException(`Cannot ${method} ${url}`));
       });
     });
   }

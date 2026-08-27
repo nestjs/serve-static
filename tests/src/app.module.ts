@@ -61,6 +61,17 @@ export class AppModule {
     };
   }
 
+  static withMissingIndex() {
+    return {
+      module: AppModule,
+      imports: [
+        ServeStaticModule.forRoot({
+          rootPath: join(import.meta.dirname, '..', 'client', 'nonexistent')
+        })
+      ]
+    };
+  }
+
   // A global pattern is stateful under `RegExp.prototype.test`, so this fixture
   // guards against the exclusion alternating between requests.
   static withGlobalRegexExclude() {
