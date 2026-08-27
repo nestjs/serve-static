@@ -414,7 +414,12 @@ describe('Express adapter', () => {
       app = await NestFactory.create(AppModule.withDefaults(), {
         logger: new NoopLogger()
       });
-      app.setGlobalPrefix('api');
+      // The leading slash is load-bearing on @nestjs/platform-express@12:
+      // `setNotFoundHandler` mounts the handler with `app.use(prefix, router)`
+      // without normalizing the prefix, so a bare 'api' never matches under
+      // Express 5 and the request falls through to Express's HTML 404. Restore
+      // 'api' once that is fixed upstream.
+      app.setGlobalPrefix('/api');
 
       server = app.getHttpServer();
       await app.init();
