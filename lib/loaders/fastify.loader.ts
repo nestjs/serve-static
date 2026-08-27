@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { loadPackage } from '@nestjs/common/utils/load-package.util.js';
+import { loadPackageSync } from '@nestjs/common/utils/load-package.util.js';
 import { AbstractHttpAdapter, ApplicationConfig } from '@nestjs/core';
 import * as fs from 'fs';
 import { createRequire } from 'module';
@@ -23,7 +23,7 @@ export class FastifyLoader extends AbstractLoader {
   ) {
     const app = httpAdapter.getInstance();
     const globalPrefix = config.getGlobalPrefix();
-    const fastifyStatic = loadPackage(
+    const fastifyStatic = loadPackageSync(
       '@fastify/static',
       'ServeStaticModule',
       () => require('@fastify/static')

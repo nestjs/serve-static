@@ -299,7 +299,7 @@ describe('Express adapter', () => {
           .get('/404')
           .expect(404)
           .expect(/Not Found/)
-          .expect(/ENOENT/);
+          .expect(/Cannot GET \/404/);
       });
     });
 
@@ -425,6 +425,28 @@ describe('Express adapter', () => {
 
       expect(response.body.message).toBe('Cannot GET /api/404');
       expect(JSON.stringify(response.body)).not.toMatch(/ENOENT|client/);
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
+
+  describe('when the SPA fallback index.html is missing', () => {
+    beforeAll(async () => {
+      app = await NestFactory.create(AppModule.withMissingIndex(), {
+        logger: new NoopLogger()
+      });
+
+      server = app.getHttpServer();
+      await app.init();
+    });
+
+    it('should not leak the filesystem path', async () => {
+      const response = await request(server).get('/some-spa-route').expect(404);
+
+      expect(JSON.stringify(response.body)).not.toMatch(/ENOENT|nonexistent/);
+      expect(response.body.message).toMatch(/Cannot GET/);
     });
 
     afterAll(async () => {
