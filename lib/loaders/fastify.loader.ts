@@ -70,8 +70,8 @@ export class FastifyLoader extends AbstractLoader {
       if (options.serveRoot) {
         app.register(fastifyStatic, {
           root: clientPath,
-          ...(options.serveStaticOptions || {}),
           wildcard: false,
+          ...(options.serveStaticOptions || {}),
           prefix: options.serveRoot
         });
 
@@ -80,14 +80,18 @@ export class FastifyLoader extends AbstractLoader {
             ? options.serveRoot + validatePath(options.renderPath as string)
             : options.serveRoot;
 
-        app.get(renderPath, renderFn);
+        if (!options.serveStaticOptions?.wildcard) {
+          app.get(renderPath, renderFn);
+        }
       } else {
         app.register(fastifyStatic, {
           root: clientPath,
-          ...(options.serveStaticOptions || {}),
-          wildcard: false
+          wildcard: false,
+          ...(options.serveStaticOptions || {})
         });
-        app.get(options.renderPath, renderFn);
+        if (!options.serveStaticOptions?.wildcard) {
+          app.get(options.renderPath, renderFn);
+        }
       }
     });
   }
