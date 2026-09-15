@@ -85,4 +85,18 @@ export class AppModule {
       ]
     };
   }
+
+  static withWildcard(wildcard: boolean = true) {
+    return {
+      module: AppModule,
+      imports: [
+        ServeStaticModule.forRoot({
+          rootPath: join(import.meta.dirname, '..', 'client'),
+          serveStaticOptions: {
+            wildcard
+          }
+        })
+      ]
+    };
+  }
 }
