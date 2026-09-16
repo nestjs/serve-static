@@ -60,7 +60,7 @@
     "@types/node": "24.13.5",
     "@types/supertest": "7.2.1",
     "express": "5.2.1",
-    "fastify": "5.12.4",
+    "fastify": "5.12.5",
     "husky": "9.1.7",
     "lint-staged": "17.5.1",
     "oxlint": "^1.60.0",
