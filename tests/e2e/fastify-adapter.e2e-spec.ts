@@ -6,6 +6,8 @@ import {
 import { AppModule } from '../src/app.module.js';
 import { NoopLogger } from '../utils/noop-logger.js';
 import request from 'supertest';
+import * as fs from 'fs';
+import { join } from 'path';
 
 describe('Fastify adapter', () => {
   let app: NestFastifyApplication;
@@ -184,6 +186,44 @@ describe('Fastify adapter', () => {
             expect(result.statusCode).toEqual(404);
           });
       });
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
+
+  describe('when "wildcard" option is set to "true"', () => {
+    const tempFileName = 'temp-dynamic-file.txt';
+    const tempFilePath = join(import.meta.dirname, '..', 'client', tempFileName);
+
+    beforeAll(async () => {
+      app = await NestFactory.create(
+        AppModule.withWildcard(true),
+        new FastifyAdapter(),
+        {
+          logger: new NoopLogger()
+        }
+      );
+
+      await app.init();
+      await app.getHttpAdapter().getInstance().ready();
+    });
+
+    it('should serve dynamically created files when wildcard is true', async () => {
+      fs.writeFileSync(tempFilePath, 'dynamic content');
+      try {
+        const result = await app.inject({
+          method: 'GET',
+          url: `/${tempFileName}`
+        });
+        expect(result.statusCode).toEqual(200);
+        expect(result.payload).toEqual('dynamic content');
+      } finally {
+        if (fs.existsSync(tempFilePath)) {
+          fs.unlinkSync(tempFilePath);
+        }
+      }
     });
 
     afterAll(async () => {
