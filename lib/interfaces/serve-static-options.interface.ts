@@ -133,6 +133,14 @@ export interface ServeStaticModuleOptions {
      * @default true
      */
     decorateReply?: boolean;
+
+    /**
+     * Only for Fastify.
+     *
+     * If true, @fastify/static adds a wildcard route to serve files and supports newly added files at runtime.
+     * @default false
+     */
+    wildcard?: boolean;
   };
 }
 
