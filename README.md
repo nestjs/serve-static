@@ -70,6 +70,7 @@ The `forRoot()` method takes an options object with a few useful properties.
 | `exclude`            | string[] / RegExp | Paths to exclude when serving the static app, given either as an array of path patterns or as a single `RegExp` matched against the request path. WARNING! Not supported by `fastify`. If you use `fastify`, you can exclude routes using regexp (set the `renderPath` to a regular expression) instead. |
 | `serveStaticOptions` | Object          | Serve static options (static files)                                                                                                                                                                  |
 | `useGlobalPrefix`    | boolean         | If `true`, static app will be prefixed by the global prefix set through `setGlobalPrefix()`. Default: `false` https://docs.nestjs.com/faq/global-prefix                                              |
+| `transformIndexHtml` | Function        | `(indexHtml: string, req) => string \| Promise<string>` — transforms the SPA fallback `index.html` contents before it is sent to the client, e.g. to inject request-specific variables.              |
 
 ## Support
 

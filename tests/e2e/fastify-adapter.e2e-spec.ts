@@ -190,4 +190,86 @@ describe('Fastify adapter', () => {
       await app.close();
     });
   });
+
+  describe('when "transformIndexHtml" is set', () => {
+    beforeAll(async () => {
+      app = await NestFactory.create(
+        AppModule.withTransformIndexHtml(),
+        new FastifyAdapter(),
+        {
+          logger: new NoopLogger()
+        }
+      );
+      app.setGlobalPrefix('api');
+
+      await app.init();
+      await app.getHttpAdapter().getInstance().ready();
+    });
+
+    describe('GET /some/spa/route', () => {
+      it('should return the transformed index.html', async () => {
+        return app
+          .inject({
+            method: 'GET',
+            url: '/some/spa/route'
+          })
+          .then((result) => {
+            expect(result.statusCode).toEqual(200);
+            expect(result.headers['content-type']).toMatch(/html/);
+            expect(result.payload).toContain('<h1>Static website</h1>');
+            expect(result.payload).toContain('<!--/some/spa/route-->');
+          });
+      });
+    });
+
+    describe('GET /logo.svg', () => {
+      it('should still return the untransformed static asset', async () => {
+        return app
+          .inject({
+            method: 'GET',
+            url: '/logo.svg'
+          })
+          .then((result) => {
+            expect(result.statusCode).toEqual(200);
+            expect(result.headers['content-type']).toMatch(/image/);
+          });
+      });
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
+
+  describe('when "transformIndexHtml" returns a Promise', () => {
+    beforeAll(async () => {
+      app = await NestFactory.create(
+        AppModule.withAsyncTransformIndexHtml(),
+        new FastifyAdapter(),
+        {
+          logger: new NoopLogger()
+        }
+      );
+      app.setGlobalPrefix('api');
+
+      await app.init();
+      await app.getHttpAdapter().getInstance().ready();
+    });
+
+    it('should await the transform before responding', async () => {
+      return app
+        .inject({
+          method: 'GET',
+          url: '/some/other/route'
+        })
+        .then((result) => {
+          expect(result.statusCode).toEqual(200);
+          expect(result.payload).toContain('Async website');
+        });
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
 });

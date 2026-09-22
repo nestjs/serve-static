@@ -437,6 +437,65 @@ describe('Express adapter', () => {
     });
   });
 
+  describe('when "transformIndexHtml" is set', () => {
+    beforeAll(async () => {
+      app = await NestFactory.create(AppModule.withTransformIndexHtml(), {
+        logger: new NoopLogger()
+      });
+
+      server = app.getHttpServer();
+      await app.init();
+    });
+
+    describe('GET /some/spa/route', () => {
+      it('should return the transformed index.html', async () => {
+        const response = await request(server)
+          .get('/some/spa/route')
+          .expect(200)
+          .expect('Content-Type', /html/);
+
+        expect(response.text).toContain('<h1>Static website</h1>');
+        expect(response.text).toContain('<!--/some/spa/route-->');
+      });
+    });
+
+    describe('GET /logo.svg', () => {
+      it('should still return the untransformed static asset', async () => {
+        return request(server)
+          .get('/logo.svg')
+          .expect(200)
+          .expect('Content-Type', /image/);
+      });
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
+
+  describe('when "transformIndexHtml" returns a Promise', () => {
+    beforeAll(async () => {
+      app = await NestFactory.create(AppModule.withAsyncTransformIndexHtml(), {
+        logger: new NoopLogger()
+      });
+
+      server = app.getHttpServer();
+      await app.init();
+    });
+
+    it('should await the transform before responding', async () => {
+      const response = await request(server)
+        .get('/some/other/route')
+        .expect(200);
+
+      expect(response.text).toContain('Async website');
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
+
   describe('when the SPA fallback index.html is missing', () => {
     beforeAll(async () => {
       app = await NestFactory.create(AppModule.withMissingIndex(), {

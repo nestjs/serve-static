@@ -30,6 +30,15 @@ export interface ServeStaticModuleOptions {
    */
   exclude?: string[] | RegExp;
   /**
+   * Transform the contents of the SPA fallback `index.html` file before it is sent to the client,
+   * e.g. to inject request-specific variables without setting up a full view engine.
+   * Only applies to the SPA fallback response, not to other static assets.
+   */
+  transformIndexHtml?: (
+    indexHtml: string,
+    req: unknown
+  ) => string | Promise<string>;
+  /**
    * Serve static options (static files)
    * Passed down to the underlying either `express.static` or `fastify-static.send`
    */
@@ -141,8 +150,7 @@ export interface ServeStaticModuleOptions {
  */
 export interface ServeStaticModuleOptionsFactory {
   createLoggerOptions():
-    | Promise<ServeStaticModuleOptions[]>
-    | ServeStaticModuleOptions[];
+    Promise<ServeStaticModuleOptions[]> | ServeStaticModuleOptions[];
 }
 
 /**

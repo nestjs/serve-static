@@ -57,12 +57,31 @@ export class FastifyLoader extends AbstractLoader {
             return;
           }
 
-          const stream = fs.createReadStream(indexFilePath);
-
           if (options.serveStaticOptions?.setHeaders) {
             options.serveStaticOptions.setHeaders(res, indexFilePath, stat);
           }
 
+          if (options.transformIndexHtml) {
+            fs.readFile(indexFilePath, 'utf8', (readErr, data) => {
+              if (readErr) {
+                const error = new NotFoundException();
+                res.status(error.getStatus()).send(error.getResponse());
+                return;
+              }
+
+              Promise.resolve(options.transformIndexHtml!(data, req))
+                .then((html) => res.type('text/html').send(html))
+                .catch(() => {
+                  res.status(500).send({
+                    statusCode: 500,
+                    message: 'Internal Server Error'
+                  });
+                });
+            });
+            return;
+          }
+
+          const stream = fs.createReadStream(indexFilePath);
           res.type('text/html').send(stream);
         });
       };
