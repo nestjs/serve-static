@@ -45,6 +45,28 @@ export class ExpressLoader extends AbstractLoader {
             const stat = fs.statSync(indexFilePath);
             options.serveStaticOptions.setHeaders(res, indexFilePath, stat);
           }
+
+          if (options.transformIndexHtml) {
+            fs.readFile(indexFilePath, 'utf8', (err, data) => {
+              if (err) {
+                // Report a plain miss rather than the underlying ENOENT, whose
+                // message echoes the resolved filesystem path back to the client.
+                const method = httpAdapter.getRequestMethod(req);
+                const url = httpAdapter.getRequestUrl(req);
+                next(new NotFoundException(`Cannot ${method} ${url}`));
+                return;
+              }
+
+              Promise.resolve(options.transformIndexHtml!(data, req))
+                .then((html) => {
+                  res.set('Content-Type', 'text/html');
+                  res.send(html);
+                })
+                .catch((transformErr) => next(transformErr));
+            });
+            return;
+          }
+
           res.sendFile(indexFilePath, null, (err: Error) => {
             if (!err) {
               return;
