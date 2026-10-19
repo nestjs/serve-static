@@ -125,6 +125,21 @@ export class AppModule {
     };
   }
 
+  static withGlobalPrefix() {
+    return {
+      module: AppModule,
+      imports: [
+        ServeStaticModule.forRoot({
+          rootPath: join(import.meta.dirname, '..', 'client'),
+          serveRoot: '/static',
+          useGlobalPrefix: true,
+          serveStaticOptions: {
+            fallthrough: true
+          }
+        })
+      ]
+    };
+  }
   // `setGlobalPrefix` accepts both 'api' and '/api', so a prefixed serve root
   // has to be built without assuming which form the application used.
   static withPrefixedServeRoot() {

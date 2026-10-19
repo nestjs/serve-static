@@ -273,10 +273,37 @@ describe('Fastify adapter', () => {
     });
   });
 
+  // One module, and so one options object, backs every app created from it,
+  // as when an e2e suite creates a fresh app for each test.
+  describe('when "useGlobalPrefix" is set and the module is reused', () => {
+    const module = AppModule.withGlobalPrefix();
+
+    for (const attempt of ['first', 'second']) {
+      it(`should serve under the prefixed root in the ${attempt} app`, async () => {
+        app = await NestFactory.create(module, new FastifyAdapter(), {
+          logger: new NoopLogger()
+        });
+        app.setGlobalPrefix('api');
+
+        await app.init();
+        await app.getHttpAdapter().getInstance().ready();
+
+        try {
+          const result = await app.inject({
+            method: 'GET',
+            url: '/api/static/logo.svg'
+          });
+          expect(result.statusCode).toEqual(200);
+        } finally {
+          await app.close();
+        }
+      });
+    }
+  });
   // `setGlobalPrefix` stores the prefix as given, so the serve root has to be
   // built without assuming it is missing a leading slash: '/api' used to
   // produce a '//api/static' prefix, which no request matches.
-  describe('when "useGlobalPrefix" is set', () => {
+  describe('when "useGlobalPrefix" is set to a differently shaped prefix', () => {
     for (const globalPrefix of ['api', '/api', '/api/']) {
       describe(`and the global prefix is "${globalPrefix}"`, () => {
         beforeAll(async () => {
