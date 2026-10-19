@@ -272,4 +272,32 @@ describe('Fastify adapter', () => {
       await app.close();
     });
   });
+
+  // One module, and so one options object, backs every app created from it,
+  // as when an e2e suite creates a fresh app for each test.
+  describe('when "useGlobalPrefix" is set and the module is reused', () => {
+    const module = AppModule.withGlobalPrefix();
+
+    for (const attempt of ['first', 'second']) {
+      it(`should serve under the prefixed root in the ${attempt} app`, async () => {
+        app = await NestFactory.create(module, new FastifyAdapter(), {
+          logger: new NoopLogger()
+        });
+        app.setGlobalPrefix('api');
+
+        await app.init();
+        await app.getHttpAdapter().getInstance().ready();
+
+        try {
+          const result = await app.inject({
+            method: 'GET',
+            url: '/api/static/logo.svg'
+          });
+          expect(result.statusCode).toEqual(200);
+        } finally {
+          await app.close();
+        }
+      });
+    }
+  });
 });

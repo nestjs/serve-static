@@ -124,4 +124,20 @@ export class AppModule {
       ]
     };
   }
+
+  static withGlobalPrefix() {
+    return {
+      module: AppModule,
+      imports: [
+        ServeStaticModule.forRoot({
+          rootPath: join(import.meta.dirname, '..', 'client'),
+          serveRoot: '/static',
+          useGlobalPrefix: true,
+          serveStaticOptions: {
+            fallthrough: true
+          }
+        })
+      ]
+    };
+  }
 }
