@@ -272,4 +272,42 @@ describe('Fastify adapter', () => {
       await app.close();
     });
   });
+
+  // `setGlobalPrefix` stores the prefix as given, so the serve root has to be
+  // built without assuming it is missing a leading slash: '/api' used to
+  // produce a '//api/static' prefix, which no request matches.
+  describe('when "useGlobalPrefix" is set', () => {
+    for (const globalPrefix of ['api', '/api', '/api/']) {
+      describe(`and the global prefix is "${globalPrefix}"`, () => {
+        beforeAll(async () => {
+          app = await NestFactory.create(
+            AppModule.withPrefixedServeRoot(),
+            new FastifyAdapter(),
+            {
+              logger: new NoopLogger()
+            }
+          );
+          app.setGlobalPrefix(globalPrefix);
+
+          await app.init();
+          await app.getHttpAdapter().getInstance().ready();
+        });
+
+        it('should serve static files under the prefixed root', async () => {
+          return app
+            .inject({
+              method: 'GET',
+              url: '/api/static/logo.svg'
+            })
+            .then((result) => {
+              expect(result.statusCode).toEqual(200);
+            });
+        });
+
+        afterAll(async () => {
+          await app.close();
+        });
+      });
+    }
+  });
 });

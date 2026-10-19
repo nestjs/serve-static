@@ -517,4 +517,31 @@ describe('Express adapter', () => {
       await app.close();
     });
   });
+
+  // `setGlobalPrefix` stores the prefix as given, so the serve root has to be
+  // built without assuming it is missing a leading slash: '/api' used to
+  // produce a '//api/static' mount, which no request matches.
+  describe('when "useGlobalPrefix" is set', () => {
+    for (const globalPrefix of ['api', '/api', '/api/']) {
+      describe(`and the global prefix is "${globalPrefix}"`, () => {
+        beforeAll(async () => {
+          app = await NestFactory.create(AppModule.withPrefixedServeRoot(), {
+            logger: new NoopLogger()
+          });
+          app.setGlobalPrefix(globalPrefix);
+
+          server = app.getHttpServer();
+          await app.init();
+        });
+
+        it('should serve static files under the prefixed root', async () => {
+          return request(server).get('/api/static/logo.svg').expect(200);
+        });
+
+        afterAll(async () => {
+          await app.close();
+        });
+      });
+    }
+  });
 });
