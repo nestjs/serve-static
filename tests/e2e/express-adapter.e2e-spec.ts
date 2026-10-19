@@ -548,7 +548,7 @@ describe('Express adapter', () => {
     for (const globalPrefix of ['api', '/api', '/api/']) {
       describe(`and the global prefix is "${globalPrefix}"`, () => {
         beforeAll(async () => {
-          app = await NestFactory.create(AppModule.withPrefixedServeRoot(), {
+          app = await NestFactory.create(AppModule.withGlobalPrefix(), {
             logger: new NoopLogger()
           });
           app.setGlobalPrefix(globalPrefix);

@@ -308,7 +308,7 @@ describe('Fastify adapter', () => {
       describe(`and the global prefix is "${globalPrefix}"`, () => {
         beforeAll(async () => {
           app = await NestFactory.create(
-            AppModule.withPrefixedServeRoot(),
+            AppModule.withGlobalPrefix(),
             new FastifyAdapter(),
             {
               logger: new NoopLogger()

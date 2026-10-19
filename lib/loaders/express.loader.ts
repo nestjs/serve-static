@@ -14,7 +14,6 @@ import {
   DEFAULT_ROOT_PATH
 } from '../serve-static.constants.js';
 import { isRouteExcluded } from '../utils/is-route-excluded.util.js';
-import { normalizeGlobalPrefix } from '../utils/normalize-global-prefix.util.js';
 import { validateGlobalPrefix } from '../utils/validate-global-prefix.util.js';
 import { validatePath } from '../utils/validate-path.util.js';
 import { AbstractLoader } from './abstract.loader.js';
@@ -113,7 +112,7 @@ export class ExpressLoader extends AbstractLoader {
         options.useGlobalPrefix &&
         validateGlobalPrefix(globalPrefix)
       ) {
-        serveRoot = `${normalizeGlobalPrefix(globalPrefix)}${serveRoot || ''}`;
+        serveRoot = `/${globalPrefix}${serveRoot || ''}`;
       }
 
       if (serveRoot) {
