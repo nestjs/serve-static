@@ -35,12 +35,16 @@ export class FastifyLoader extends AbstractLoader {
       const clientPath = options.rootPath ?? DEFAULT_ROOT_PATH;
       const indexFilePath = this.getIndexFilePath(clientPath);
 
+      // The options object outlives this call: it is shared by every app
+      // created from the same module, e.g. one per test. Prefixing it in place
+      // would prepend the global prefix again on each of them.
+      let serveRoot = options.serveRoot;
       if (
         globalPrefix &&
         options.useGlobalPrefix &&
         validateGlobalPrefix(globalPrefix)
       ) {
-        options.serveRoot = `/${globalPrefix}${options.serveRoot || ''}`;
+        serveRoot = `/${globalPrefix}${serveRoot || ''}`;
       }
 
       const renderFn = (req: any, res: any) => {
@@ -86,18 +90,18 @@ export class FastifyLoader extends AbstractLoader {
         });
       };
 
-      if (options.serveRoot) {
+      if (serveRoot) {
         app.register(fastifyStatic, {
           root: clientPath,
           ...(options.serveStaticOptions || {}),
           wildcard: false,
-          prefix: options.serveRoot
+          prefix: serveRoot
         });
 
         const renderPath =
-          typeof options.serveRoot === 'string'
-            ? options.serveRoot + validatePath(options.renderPath as string)
-            : options.serveRoot;
+          typeof serveRoot === 'string'
+            ? serveRoot + validatePath(options.renderPath as string)
+            : serveRoot;
 
         app.get(renderPath, renderFn);
       } else {

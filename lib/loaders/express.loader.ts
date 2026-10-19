@@ -103,23 +103,27 @@ export class ExpressLoader extends AbstractLoader {
         }
       };
 
+      // The options object outlives this call: it is shared by every app
+      // created from the same module, e.g. one per test. Prefixing it in place
+      // would prepend the global prefix again on each of them.
+      let serveRoot = options.serveRoot;
       if (
         globalPrefix &&
         options.useGlobalPrefix &&
         validateGlobalPrefix(globalPrefix)
       ) {
-        options.serveRoot = `/${globalPrefix}${options.serveRoot || ''}`;
+        serveRoot = `/${globalPrefix}${serveRoot || ''}`;
       }
 
-      if (options.serveRoot) {
+      if (serveRoot) {
         app.use(
-          options.serveRoot,
+          serveRoot,
           express.static(clientPath, options.serveStaticOptions)
         );
         const renderPath =
-          typeof options.serveRoot === 'string'
-            ? options.serveRoot + validatePath(options.renderPath as string)
-            : options.serveRoot;
+          typeof serveRoot === 'string'
+            ? serveRoot + validatePath(options.renderPath as string)
+            : serveRoot;
 
         app.get(renderPath, renderFn);
       } else {
