@@ -8,6 +8,7 @@ import {
   DEFAULT_FASTIFY_RENDER_PATH,
   DEFAULT_ROOT_PATH
 } from '../serve-static.constants.js';
+import { normalizeGlobalPrefix } from '../utils/normalize-global-prefix.util.js';
 import { validateGlobalPrefix } from '../utils/validate-global-prefix.util.js';
 import { validatePath } from '../utils/validate-path.util.js';
 import { AbstractLoader } from './abstract.loader.js';
@@ -44,7 +45,7 @@ export class FastifyLoader extends AbstractLoader {
         options.useGlobalPrefix &&
         validateGlobalPrefix(globalPrefix)
       ) {
-        serveRoot = `/${globalPrefix}${serveRoot || ''}`;
+        serveRoot = `${normalizeGlobalPrefix(globalPrefix)}${serveRoot || ''}`;
       }
 
       const renderFn = (req: any, res: any) => {
