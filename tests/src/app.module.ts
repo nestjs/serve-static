@@ -140,4 +140,11 @@ export class AppModule {
       ]
     };
   }
+
+  static withRootPath(rootPath: string) {
+    return {
+      module: AppModule,
+      imports: [ServeStaticModule.forRoot({ rootPath })]
+    };
+  }
 }
