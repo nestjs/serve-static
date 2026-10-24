@@ -8,6 +8,7 @@ import { loadPackageSync } from '@nestjs/common/utils/load-package.util.js';
 import { AbstractHttpAdapter, ApplicationConfig } from '@nestjs/core';
 import * as fs from 'fs';
 import { createRequire } from 'module';
+import { basename, dirname } from 'path';
 import { ServeStaticModuleOptions } from '../interfaces/serve-static-options.interface.js';
 import {
   DEFAULT_EXPRESS_RENDER_PATH,
@@ -68,7 +69,11 @@ export class ExpressLoader extends AbstractLoader {
             return;
           }
 
-          res.sendFile(indexFilePath, null, (err: Error) => {
+          // Send the file relative to its folder, as `express.static` does.
+          // Given an absolute path, `send` checks `dotfiles` against all of
+          // its segments, so a root under `.output` would 404 here.
+          const root = dirname(indexFilePath);
+          res.sendFile(basename(indexFilePath), { root }, (err: Error) => {
             if (!err) {
               return;
             }

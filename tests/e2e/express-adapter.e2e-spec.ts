@@ -4,7 +4,10 @@ import {
   PayloadTooLargeException
 } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { cpSync, mkdtempSync, rmSync } from 'fs';
 import { Server } from 'net';
+import { tmpdir } from 'os';
+import { join, relative } from 'path';
 import request from 'supertest';
 import { AppModule } from '../src/app.module.js';
 import { NoopLogger } from '../utils/noop-logger.js';
@@ -566,5 +569,66 @@ describe('Express adapter', () => {
         });
       });
     }
+  });
+
+  // Nuxt builds the client into `.output/public`. Folders above the root are
+  // not part of the request, so a dot in their names must not hide the page.
+  describe('when the root path is inside a dot folder', () => {
+    let tmpDir: string;
+
+    beforeAll(async () => {
+      tmpDir = mkdtempSync(join(tmpdir(), 'serve-static-'));
+      const rootPath = join(tmpDir, '.output', 'public');
+      cpSync(join(import.meta.dirname, '..', 'client'), rootPath, {
+        recursive: true
+      });
+
+      app = await NestFactory.create(AppModule.withRootPath(rootPath), {
+        logger: new NoopLogger()
+      });
+
+      server = app.getHttpServer();
+      await app.init();
+    });
+
+    it('should return index page for a client-side route', async () => {
+      return request(server)
+        .get('/some/spa/route')
+        .expect(200)
+        .expect(/Static website/);
+    });
+
+    afterAll(async () => {
+      await app.close();
+      rmSync(tmpDir, { recursive: true, force: true });
+    });
+  });
+
+  // `rootPath` defaults to the relative 'client'.
+  describe('when the root path is relative', () => {
+    beforeAll(async () => {
+      const rootPath = relative(
+        process.cwd(),
+        join(import.meta.dirname, '..', 'client')
+      );
+
+      app = await NestFactory.create(AppModule.withRootPath(rootPath), {
+        logger: new NoopLogger()
+      });
+
+      server = app.getHttpServer();
+      await app.init();
+    });
+
+    it('should return index page for a client-side route', async () => {
+      return request(server)
+        .get('/some/spa/route')
+        .expect(200)
+        .expect(/Static website/);
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
   });
 });
