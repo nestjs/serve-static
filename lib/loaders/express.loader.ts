@@ -24,7 +24,7 @@ const require = createRequire(import.meta.url);
 
 @Injectable()
 export class ExpressLoader extends AbstractLoader {
-  private readonly logger = new Logger(ExpressLoader.name);
+  private readonly logger = new Logger(this.constructor.name);
 
   public register(
     httpAdapter: AbstractHttpAdapter,
@@ -33,9 +33,6 @@ export class ExpressLoader extends AbstractLoader {
   ) {
     const app = httpAdapter.getInstance();
     const globalPrefix = config.getGlobalPrefix();
-    const express = loadPackageSync('express', 'ServeStaticModule', () =>
-      require('express')
-    );
     optionsArr.forEach((options) => {
       options.renderPath = options.renderPath ?? DEFAULT_EXPRESS_RENDER_PATH;
       const clientPath = options.rootPath ?? DEFAULT_ROOT_PATH;
@@ -121,11 +118,13 @@ export class ExpressLoader extends AbstractLoader {
         serveRoot = `${normalizeGlobalPrefix(globalPrefix)}${serveRoot || ''}`;
       }
 
+      this.serveFiles(
+        httpAdapter,
+        clientPath,
+        serveRoot,
+        options.serveStaticOptions
+      );
       if (serveRoot) {
-        app.use(
-          serveRoot,
-          express.static(clientPath, options.serveStaticOptions)
-        );
         const renderPath =
           typeof serveRoot === 'string'
             ? serveRoot + validatePath(options.renderPath as string)
@@ -133,7 +132,6 @@ export class ExpressLoader extends AbstractLoader {
 
         app.get(renderPath, renderFn);
       } else {
-        app.use(express.static(clientPath, options.serveStaticOptions));
         app.get(options.renderPath, renderFn);
       }
 
@@ -160,5 +158,26 @@ export class ExpressLoader extends AbstractLoader {
         return next(new NotFoundException(`Cannot ${method} ${url}`));
       });
     });
+  }
+
+  /**
+   * Serves the files of `clientPath`, under `serveRoot` when given, with
+   * `express.static`.
+   */
+  protected serveFiles(
+    httpAdapter: AbstractHttpAdapter,
+    clientPath: string,
+    serveRoot: string | undefined,
+    serveStaticOptions: ServeStaticModuleOptions['serveStaticOptions']
+  ) {
+    const app = httpAdapter.getInstance();
+    const express = loadPackageSync('express', 'ServeStaticModule', () =>
+      require('express')
+    );
+    if (serveRoot) {
+      app.use(serveRoot, express.static(clientPath, serveStaticOptions));
+    } else {
+      app.use(express.static(clientPath, serveStaticOptions));
+    }
   }
 }
