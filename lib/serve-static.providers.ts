@@ -3,6 +3,7 @@ import { HttpAdapterHost } from '@nestjs/core';
 import { AbstractLoader } from './loaders/abstract.loader.js';
 import { ExpressLoader } from './loaders/express.loader.js';
 import { FastifyLoader } from './loaders/fastify.loader.js';
+import { NodeLoader } from './loaders/node.loader.js';
 import { NoopLoader } from './loaders/noop.loader.js';
 
 export const serveStaticProviders: Provider[] = [
@@ -19,6 +20,10 @@ export const serveStaticProviders: Provider[] = [
         httpAdapter.constructor.name === 'FastifyAdapter'
       ) {
         return new FastifyLoader();
+      }
+      // The Node adapter (@nestjs/platform-node)
+      if (httpAdapter.getType?.() === 'node') {
+        return new NodeLoader();
       }
       return new ExpressLoader();
     },
