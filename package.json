@@ -1,7 +1,16 @@
 {
   "name": "@nestjs/serve-static",
   "version": "12.1.1",
-  "description": "Nest - modern, fast, powerful node.js web framework (@serve-static)",
+  "description": "Serve static files and single-page applications, such as a React, Vue or Angular build, from a NestJS application.",
+  "keywords": [
+    "nestjs",
+    "nest",
+    "static-files",
+    "serve-static",
+    "spa",
+    "single-page-application",
+    "assets"
+  ],
   "author": "Kamil Mysliwiec",
   "license": "MIT",
   "type": "module",
