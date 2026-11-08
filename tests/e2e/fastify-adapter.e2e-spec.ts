@@ -337,4 +337,43 @@ describe('Fastify adapter', () => {
       });
     }
   });
+
+  // One module, and so one options object, backs every app created from it,
+  // whatever adapter each app runs on.
+  describe('when the module was used by an express app first', () => {
+    beforeAll(async () => {
+      const module = AppModule.withFallthrough();
+
+      const expressApp = await NestFactory.create(module, {
+        logger: new NoopLogger()
+      });
+      expressApp.setGlobalPrefix('api');
+      await expressApp.init();
+      await expressApp.close();
+
+      app = await NestFactory.create(module, new FastifyAdapter(), {
+        logger: new NoopLogger()
+      });
+      app.setGlobalPrefix('api');
+
+      await app.init();
+      await app.getHttpAdapter().getInstance().ready();
+    });
+
+    it('should return index page for a client-side route', async () => {
+      return app
+        .inject({
+          method: 'GET',
+          url: '/some/spa/route'
+        })
+        .then((result) => {
+          expect(result.statusCode).toEqual(200);
+          expect(result.payload).toContain('Static website');
+        });
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
 });

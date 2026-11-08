@@ -34,7 +34,7 @@ export class ExpressLoader extends AbstractLoader {
     const app = httpAdapter.getInstance();
     const globalPrefix = config.getGlobalPrefix();
     optionsArr.forEach((options) => {
-      options.renderPath = options.renderPath ?? DEFAULT_EXPRESS_RENDER_PATH;
+      const renderPath = options.renderPath ?? DEFAULT_EXPRESS_RENDER_PATH;
       const clientPath = options.rootPath ?? DEFAULT_ROOT_PATH;
       const indexFilePath = this.getIndexFilePath(clientPath);
 
@@ -125,14 +125,14 @@ export class ExpressLoader extends AbstractLoader {
         options.serveStaticOptions
       );
       if (serveRoot) {
-        const renderPath =
+        const prefixedRenderPath =
           typeof serveRoot === 'string'
-            ? serveRoot + validatePath(options.renderPath as string)
+            ? serveRoot + validatePath(renderPath as string)
             : serveRoot;
 
-        app.get(renderPath, renderFn);
+        app.get(prefixedRenderPath, renderFn);
       } else {
-        app.get(options.renderPath, renderFn);
+        app.get(renderPath, renderFn);
       }
 
       app.use((err: any, req: any, _res: any, next: Function) => {
