@@ -31,7 +31,7 @@ export class FastifyLoader extends AbstractLoader {
     );
 
     optionsArr.forEach((options) => {
-      options.renderPath = options.renderPath ?? DEFAULT_FASTIFY_RENDER_PATH;
+      const renderPath = options.renderPath ?? DEFAULT_FASTIFY_RENDER_PATH;
 
       const clientPath = options.rootPath ?? DEFAULT_ROOT_PATH;
       const indexFilePath = this.getIndexFilePath(clientPath);
@@ -99,19 +99,19 @@ export class FastifyLoader extends AbstractLoader {
           prefix: serveRoot
         });
 
-        const renderPath =
+        const prefixedRenderPath =
           typeof serveRoot === 'string'
-            ? serveRoot + validatePath(options.renderPath as string)
+            ? serveRoot + validatePath(renderPath as string)
             : serveRoot;
 
-        app.get(renderPath, renderFn);
+        app.get(prefixedRenderPath, renderFn);
       } else {
         app.register(fastifyStatic, {
           root: clientPath,
           ...(options.serveStaticOptions || {}),
           wildcard: false
         });
-        app.get(options.renderPath, renderFn);
+        app.get(renderPath, renderFn);
       }
     });
   }

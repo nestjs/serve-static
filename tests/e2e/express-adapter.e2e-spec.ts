@@ -4,6 +4,7 @@ import {
   PayloadTooLargeException
 } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { FastifyAdapter } from '@nestjs/platform-fastify';
 import { cpSync, mkdtempSync, rmSync } from 'fs';
 import { Server } from 'net';
 import { tmpdir } from 'os';
@@ -615,6 +616,42 @@ describe('Express adapter', () => {
       app = await NestFactory.create(AppModule.withRootPath(rootPath), {
         logger: new NoopLogger()
       });
+
+      server = app.getHttpServer();
+      await app.init();
+    });
+
+    it('should return index page for a client-side route', async () => {
+      return request(server)
+        .get('/some/spa/route')
+        .expect(200)
+        .expect(/Static website/);
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
+
+  // One module, and so one options object, backs every app created from it,
+  // whatever adapter each app runs on.
+  describe('when the module was used by a fastify app first', () => {
+    beforeAll(async () => {
+      const module = AppModule.withDefaults();
+
+      const fastifyApp = await NestFactory.create(
+        module,
+        new FastifyAdapter(),
+        { logger: new NoopLogger() }
+      );
+      fastifyApp.setGlobalPrefix('api');
+      await fastifyApp.init();
+      await fastifyApp.close();
+
+      app = await NestFactory.create(module, {
+        logger: new NoopLogger()
+      });
+      app.setGlobalPrefix('api');
 
       server = app.getHttpServer();
       await app.init();
