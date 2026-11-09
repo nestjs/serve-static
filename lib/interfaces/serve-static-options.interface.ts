@@ -112,7 +112,7 @@ export interface ServeStaticModuleOptions {
 
     /**
      * Redirect to trailing "/" when the pathname is a dir.
-     * Defaults to true when using Express, and false when using Fastify
+     * Defaults to true with Express and the Node adapter, and false with Fastify
      * (this mirrors each underlying static file server's own default).
      */
     redirect?: boolean;
