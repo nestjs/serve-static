@@ -111,7 +111,9 @@ export interface ServeStaticModuleOptions {
     maxAge?: number | string;
 
     /**
-     * Redirect to trailing "/" when the pathname is a dir. Defaults to true.
+     * Redirect to trailing "/" when the pathname is a dir.
+     * Defaults to true with Express and the Node adapter, and false with Fastify
+     * (this mirrors each underlying static file server's own default).
      */
     redirect?: boolean;
 
