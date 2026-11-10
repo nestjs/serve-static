@@ -56,7 +56,9 @@ export class ExpressLoader extends AbstractLoader {
                 return;
               }
 
-              Promise.resolve(options.transformIndexHtml!(data, req))
+              new Promise<string>((resolve) =>
+                resolve(options.transformIndexHtml!(data, req))
+              )
                 .then((html) => {
                   res.set('Content-Type', 'text/html');
                   res.send(html);
