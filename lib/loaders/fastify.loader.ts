@@ -74,7 +74,9 @@ export class FastifyLoader extends AbstractLoader {
                 return;
               }
 
-              Promise.resolve(options.transformIndexHtml!(data, req))
+              new Promise<string>((resolve) =>
+                resolve(options.transformIndexHtml!(data, req))
+              )
                 .then((html) => res.type('text/html').send(html))
                 .catch(() => {
                   res.status(500).send({

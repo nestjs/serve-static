@@ -273,6 +273,37 @@ describe('Fastify adapter', () => {
     });
   });
 
+  describe('when "transformIndexHtml" throws synchronously', () => {
+    beforeAll(async () => {
+      app = await NestFactory.create(
+        AppModule.withThrowingTransformIndexHtml(),
+        new FastifyAdapter(),
+        {
+          logger: new NoopLogger()
+        }
+      );
+      app.setGlobalPrefix('api');
+
+      await app.init();
+      await app.getHttpAdapter().getInstance().ready();
+    });
+
+    it('should answer 500 and keep serving', async () => {
+      const failed = await app.inject({
+        method: 'GET',
+        url: '/some/other/route'
+      });
+      expect(failed.statusCode).toEqual(500);
+
+      const next = await app.inject({ method: 'GET', url: '/logo.svg' });
+      expect(next.statusCode).toEqual(200);
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
+
   // One module, and so one options object, backs every app created from it,
   // as when an e2e suite creates a fresh app for each test.
   describe('when "useGlobalPrefix" is set and the module is reused', () => {

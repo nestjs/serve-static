@@ -92,6 +92,24 @@ export class AppModule {
     };
   }
 
+  static withThrowingTransformIndexHtml() {
+    return {
+      module: AppModule,
+      imports: [
+        ServeStaticModule.forRoot({
+          rootPath: join(import.meta.dirname, '..', 'client'),
+          exclude: ['/api/{*any}'],
+          serveStaticOptions: {
+            fallthrough: true
+          },
+          transformIndexHtml: () => {
+            throw new Error('transform failed');
+          }
+        })
+      ]
+    };
+  }
+
   static withAsyncTransformIndexHtml() {
     return {
       module: AppModule,

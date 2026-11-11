@@ -500,6 +500,29 @@ describe('Express adapter', () => {
     });
   });
 
+  describe('when "transformIndexHtml" throws synchronously', () => {
+    beforeAll(async () => {
+      app = await NestFactory.create(
+        AppModule.withThrowingTransformIndexHtml(),
+        {
+          logger: new NoopLogger()
+        }
+      );
+
+      server = app.getHttpServer();
+      await app.init();
+    });
+
+    it('should answer 500 and keep serving', async () => {
+      await request(server).get('/some/other/route').expect(500);
+      await request(server).get('/logo.svg').expect(200);
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
+
   describe('when the SPA fallback index.html is missing', () => {
     beforeAll(async () => {
       app = await NestFactory.create(AppModule.withMissingIndex(), {
