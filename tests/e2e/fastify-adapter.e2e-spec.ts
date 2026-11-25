@@ -101,6 +101,43 @@ describe('Fastify adapter', () => {
     });
   });
 
+  // `fallthrough` defaults to true, as it does for the Express adapter, so an
+  // app that sets no `serveStaticOptions` still gets the SPA fallback.
+  describe('when "fallthrough" option is not set', () => {
+    beforeAll(async () => {
+      app = await NestFactory.create(
+        AppModule.withDefaults(),
+        new FastifyAdapter(),
+        {
+          logger: new NoopLogger()
+        }
+      );
+      app.setGlobalPrefix('api');
+
+      await app.init();
+      await app.getHttpAdapter().getInstance().ready();
+    });
+
+    describe('GET /some/spa/route', () => {
+      it('should return HTML file', async () => {
+        return app
+          .inject({
+            method: 'GET',
+            url: '/some/spa/route'
+          })
+          .then((result) => {
+            expect(result.statusCode).toEqual(200);
+            expect(result.headers['content-type']).toMatch(/html/);
+            expect(result.payload).toContain('Static website');
+          });
+      });
+    });
+
+    afterAll(async () => {
+      await app.close();
+    });
+  });
+
   describe('when "fallthrough" option is set to "false"', () => {
     beforeAll(async () => {
       app = await NestFactory.create(

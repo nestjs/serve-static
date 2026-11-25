@@ -49,7 +49,8 @@ export class FastifyLoader extends AbstractLoader {
       }
 
       const renderFn = (req: any, res: any) => {
-        if (!options.serveStaticOptions?.fallthrough) {
+        // `fallthrough` defaults to true, as it does with `express.static`.
+        if (options.serveStaticOptions?.fallthrough === false) {
           const error = new NotFoundException();
           res.status(error.getStatus()).send(error.getResponse());
           return;
